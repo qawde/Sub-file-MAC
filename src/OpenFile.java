@@ -12,16 +12,18 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
-public class OpenFile {
+public class OpenFile
+{
 	JFileChooser fc = new JFileChooser();
-	
+
 	StringBuilder sb = new StringBuilder();
 	String filename;
 	String filePath;
 	XWPFDocument document;
-	
-	public void ChooseFile() throws Exception {
-		
+
+	public void ChooseFile() throws Exception
+	{
+
 		fc.setCurrentDirectory(new File(System.getProperty("user.home")));
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.addChoosableFileFilter(new FileNameExtensionFilter("Text Documents", "txt"));
@@ -29,10 +31,11 @@ public class OpenFile {
 		fc.addChoosableFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
 		fc.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp"));
 		fc.setAcceptAllFileFilterUsed(true);
-		
+
 		int result = fc.showOpenDialog(null);
-		if(result == JFileChooser.APPROVE_OPTION) {
-			
+		if (result == JFileChooser.APPROVE_OPTION)
+		{
+
 			File selectedFile = fc.getSelectedFile();
 			filename = selectedFile.getName();
 			filePath = selectedFile.getAbsolutePath();
@@ -43,51 +46,49 @@ public class OpenFile {
 			String doc = "doc";
 			String docx = "docx";
 			String xlsx = "xlsx";
-			
-			if (pdf.equalsIgnoreCase(extension)) {
-			
-				
+
+			if (pdf.equalsIgnoreCase(extension))
+			{
+
 				PDFManager pdfManager = new PDFManager();
 				pdfManager.setFilePath((selectedFile.getAbsolutePath()));
 
 				sb = new StringBuilder(pdfManager.ToText());
 			}
-			
-			
-			
-			else if (xlsx.equalsIgnoreCase(extension)) {
+
+			else if (xlsx.equalsIgnoreCase(extension))
+			{
 				ExcelReader excelReader = new ExcelReader();
 				excelReader.setInputFile(selectedFile.getAbsolutePath());
 				sb = new StringBuilder(excelReader.read());
-			}
-			else if (doc.equalsIgnoreCase(extension)) {
+			} else if (doc.equalsIgnoreCase(extension))
+			{
 				DocReader docReader = new DocReader();
 				docReader.setFileName(selectedFile.getAbsolutePath());
 				sb = new StringBuilder(docReader.DocToText());
 
-			}
-			else if (docx.equalsIgnoreCase(extension)) {
+			} else if (docx.equalsIgnoreCase(extension))
+			{
 				DocReader docReader = new DocReader();
 				docReader.setFilePath(selectedFile.getAbsolutePath());
 				sb = new StringBuilder(docReader.DocxToText());
-				//}
-			}
-			else if (txt.equalsIgnoreCase(extension)) {
-				
-				java.io.File file =fc.getSelectedFile();
+				// }
+			} else if (txt.equalsIgnoreCase(extension))
+			{
+
+				java.io.File file = fc.getSelectedFile();
 				Scanner input = new Scanner(file);
-				while(input.hasNext()) {
+				while (input.hasNext())
+				{
 					sb.append(input.nextLine());
 					sb.append("\r\n");
 				}
 				input.close();
 			}
-		}
-		else{
+		} else
+		{
 			sb.append("No file was selected");
 		}
 	}
-	
-	
-	
+
 }

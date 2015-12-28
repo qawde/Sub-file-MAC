@@ -41,7 +41,8 @@ import javax.swing.SwingConstants;
 
 import java.awt.Font;
 
-public class ChooseFunction extends JFrame {
+public class ChooseFunction extends JFrame
+{
 
 	private JPanel contentPane;
 	String fileName;
@@ -55,13 +56,18 @@ public class ChooseFunction extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
+	public static void main(String[] args)
+	{
+		EventQueue.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				try
+				{
 					ChooseFunction frame = new ChooseFunction(0);
 					frame.setVisible(true);
-				} catch (Exception e) {
+				} catch (Exception e)
+				{
 					e.printStackTrace();
 				}
 			}
@@ -71,7 +77,8 @@ public class ChooseFunction extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ChooseFunction(int accessID) {
+	public ChooseFunction(int accessID)
+	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -82,12 +89,16 @@ public class ChooseFunction extends JFrame {
 
 		JButton btnNewButton = new JButton("Security Policy Generator");
 		btnNewButton.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
-		if (!Login.username.getText().equals("admin")) {
+		if (!Login.username.getText().equals("admin"))
+		{
 			btnNewButton.setVisible(false);
-		} else {
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					BrowseFile browsefile = new BrowseFile(3);
+		} else
+		{
+			btnNewButton.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					BrowseFile browsefile = new BrowseFile(0);
 					setVisible(false);
 					browsefile.setVisible(true);
 				}
@@ -100,129 +111,153 @@ public class ChooseFunction extends JFrame {
 
 		JButton btnNewButton_1 = new JButton("File Viewer");
 		btnNewButton_1.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		btnNewButton_1.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
 				of = new OpenFile();
-				try {
+				try
+				{
 					of.ChooseFile();
-				} catch (Exception ex) {
+				} catch (Exception ex)
+				{
 					ex.printStackTrace();
 				}
 
 				char symbols = '\u25E6';
 
 				File f = new File("./indexes/" + of.filename + ".policy");
-					try {
+				try
+				{
+					BufferedReader br = new BufferedReader(new FileReader(f));
+					String line;
+					StringBuilder sb = new StringBuilder();
+					while ((line = br.readLine()) != null)
+					{
+						sb.append(line);
+					}
+					br.close();
 
-						BufferedReader br = new BufferedReader(new FileReader(f));
-						String line;
-						StringBuilder sb = new StringBuilder();
-						while ((line = br.readLine()) != null) {
-							sb.append(line);
+					if (sb.toString().contains("|"))
+					{
+						build = new StringBuilder(of.sb.toString());
+						String[] high = sb.toString().split(Pattern.quote("|"));
+
+						for (int i = 0; i < high.length; i++)
+						{
+							String[] details = high[i].split(Pattern.quote(","));
+
+							int firstindex = Integer.parseInt(details[0]);
+							int lastindex = Integer.parseInt(details[1]);
+							int detail = Integer.parseInt(details[2]);
+							int length = lastindex - firstindex;
+							char[] symbolArr = new char[length];
+							Arrays.fill(symbolArr, symbols);
+							String longsymbols = new String(symbolArr);
+
+							if (detail <= accessID)
+							{
+								build.replace(firstindex, lastindex, longsymbols);
+							}
 						}
-						br.close();
 
-						if (sb.toString().contains("|")) {
-							build = new StringBuilder(of.sb.toString());
-							String[] high = sb.toString().split(Pattern.quote("|"));
+						String pdf = "pdf";
+						String txt = "txt";
+						String docx = "docx";
+						String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
+						File newfile = new File("./temp file/" + of.filename);
+						// File newfile2 = new File("./temp file 2/" +
+						// of.filename);
 
-							for (int i = 0; i < high.length; i++) {
-								String[] details = high[i].split(Pattern.quote(","));
-
-								int firstindex = Integer.parseInt(details[0]);
-								int lastindex = Integer.parseInt(details[1]);
-								int detail = Integer.parseInt(details[2]);
-								int length = lastindex - firstindex;
-								char[] symbolArr = new char[length];
-								Arrays.fill(symbolArr, symbols);
-								String longsymbols = new String(symbolArr);
-
-								if (detail <= accessID) {
-									build.replace(firstindex, lastindex,longsymbols);
+						try
+						{
+							if (pdf.equalsIgnoreCase(extension))
+							{
+								Document doc = new Document(PageSize.A4);
+								PdfWriter.getInstance(doc, new FileOutputStream("./temp file/" + of.filename));
+								doc.open();
+								String breaking[] = build.toString().split("\r\n|\r|\r");
+								for (int count = 0; count < breaking.length; count++)
+								{
+									Paragraph para = new Paragraph();
+									para.add(breaking[count]);
+									// System.out.println(/*breaking[count]*/para);
+									doc.add(para);
+								}
+								doc.close();
+								if (Desktop.isDesktopSupported())
+								{
+									Desktop.getDesktop().open(newfile);
 								}
 							}
-							
-							String pdf = "pdf";
-							String txt = "txt";
-							String docx = "docx";
-							String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1,of.filename.length());
-							File newfile = new File("./temp file/"+ of.filename);
-							//File newfile2 = new File("./temp file 2/" + of.filename);
 
-							try {
-								if (pdf.equalsIgnoreCase(extension)) {
-									Document doc = new Document(PageSize.A4);
-									PdfWriter.getInstance(doc,new FileOutputStream("./temp file/"+ of.filename));
-									doc.open();
-									String breaking[] = build.toString().split("\r\n|\r|\r");
-									for (int count = 0; count < breaking.length; count++) {
-										Paragraph para = new Paragraph();
-										para.add(breaking[count]);
-										//System.out.println(/*breaking[count]*/para);
-										doc.add(para);
+							else if (docx.equalsIgnoreCase(extension))
+							{
+								try
+								{
+									FileInputStream is = new FileInputStream(of.filePath);
+									XWPFDocument doc = new XWPFDocument(is);
+									List<XWPFParagraph> paras = doc.getParagraphs();
+									XWPFDocument newdoc = new XWPFDocument();
+
+									String test[] = build.toString().split("\r\n|\r|\n");
+									int count = 0;
+									for (XWPFParagraph para : paras)
+									{
+										if (!para.getParagraphText().isEmpty())
+										{
+											XWPFParagraph newpara = newdoc.createParagraph();
+											List<XWPFRun> runs = para.getRuns();
+											for (int i = runs.size() - 1; i > 0; i--)
+											{
+												para.removeRun(i);
+											}
+											XWPFRun run = runs.get(0);
+											run.setText(test[count], 0);
+											newpara.addRun(run);
+											copyAllRunsToAnotherParagraph(para, newpara, test[count]);
+											count++;
+										}
 									}
-									doc.close();
-									if (Desktop.isDesktopSupported()) {
+									FileOutputStream fos = new FileOutputStream(new File("./temp file/" + of.filename));
+									newdoc.write(fos);
+									fos.flush();
+									fos.close();
+									if (Desktop.isDesktopSupported())
+									{
+										Desktop.getDesktop().open(newfile);
+									}
+								} catch (FileNotFoundException ex)
+								{
+									ex.printStackTrace();
+								} catch (IOException ex)
+								{
+									ex.printStackTrace();
+								}
+							}
+
+							else if (txt.equalsIgnoreCase(extension))
+							{
+
+								Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./temp file/" + of.filename), Charset.forName("utf-8")));
+								{
+									writer.write(build.toString());
+									writer.close();
+									if (Desktop.isDesktopSupported())
+									{
 										Desktop.getDesktop().open(newfile);
 									}
 								}
-
-								else if (docx.equalsIgnoreCase(extension)) {
-									try {
-										FileInputStream is = new FileInputStream(of.filePath);
-										XWPFDocument doc = new XWPFDocument(is);
-										List<XWPFParagraph> paras = doc.getParagraphs();
-										XWPFDocument newdoc = new XWPFDocument();
-										
-				
-										String test[] = build.toString().split("\r\n|\r|\n");
-										int count = 0;
-										for (XWPFParagraph para : paras) {
-											if (!para.getParagraphText().isEmpty()) {
-												XWPFParagraph newpara = newdoc.createParagraph();
-												List<XWPFRun> runs = para.getRuns();
-												for (int i = runs.size() - 1; i > 0; i--) {
-													para.removeRun(i);
-												}
-												XWPFRun run = runs.get(0);
-												run.setText(test[count], 0);
-												newpara.addRun(run);
-												copyAllRunsToAnotherParagraph(para, newpara,test[count]);
-												count++;
-											}
-										}
-										FileOutputStream fos = new FileOutputStream(new File("./temp file/"+ of.filename));
-										newdoc.write(fos);
-										fos.flush();
-										fos.close();
-										if (Desktop.isDesktopSupported()) {
-											Desktop.getDesktop().open(newfile);
-										}
-									} catch (FileNotFoundException ex) {
-										ex.printStackTrace();
-									} catch (IOException ex) {
-										ex.printStackTrace();
-									}
-								}
-
-								else if (txt.equalsIgnoreCase(extension)) {
-
-									Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./temp file/"+ of.filename),Charset.forName("utf-8")));
-									{
-										writer.write(build.toString());
-										writer.close();
-										if (Desktop.isDesktopSupported()) {
-											Desktop.getDesktop().open(newfile);
-										}
-									}
-								}
-							} catch (Exception ex) {
-								ex.printStackTrace();
 							}
+						} catch (Exception ex)
+						{
+							ex.printStackTrace();
 						}
-					} catch (Exception ex) {
-						ex.printStackTrace();
 					}
+				} catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}
 			}
 		});
 		btnNewButton_1.setBounds(100, 119, 234, 23);
@@ -230,8 +265,10 @@ public class ChooseFunction extends JFrame {
 
 		JButton btnNewButton_2 = new JButton("Log out");
 		btnNewButton_2.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		btnNewButton_2.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
 				Login login = new Login();
 				setVisible(false);
 				login.setVisible(true);
@@ -247,11 +284,13 @@ public class ChooseFunction extends JFrame {
 		contentPane.add(lblPleaseChooseWhat);
 	}
 
-	private static void copyAllRunsToAnotherParagraph(XWPFParagraph oldPar,
-			XWPFParagraph newPar, String text) {
-		for (XWPFRun run : oldPar.getRuns()) {
+	private static void copyAllRunsToAnotherParagraph(XWPFParagraph oldPar, XWPFParagraph newPar, String text)
+	{
+		for (XWPFRun run : oldPar.getRuns())
+		{
 			String textInRun = run.getText(0);
-			if (textInRun == null || textInRun.isEmpty()) {
+			if (textInRun == null || textInRun.isEmpty())
+			{
 				continue;
 			}
 

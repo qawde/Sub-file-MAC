@@ -13,9 +13,9 @@ import org.apache.poi.xwpf.usermodel.XWPFHeaderFooter;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 
+public class DocReader
+{
 
-public class DocReader {
-	
 	private String Text;
 	private String filePath;
 	private File file;
@@ -24,31 +24,35 @@ public class DocReader {
 	private String head;
 	private String foot;
 	private static String Texts;
-	
-	public String DocxToText() throws IOException {
-		
+
+	public String DocxToText() throws IOException
+	{
+
 		file = new File(filePath);
 		FileInputStream inputStream = new FileInputStream(file);
 		XWPFDocument doc = new XWPFDocument(inputStream);
 		XWPFWordExtractor ext = new XWPFWordExtractor(doc);
 
-		String paraText =ext.getText();
-		
+		String paraText = ext.getText();
+
 		return paraText;
 	}
-	
-	
-	public void setFilePath(String filePath) {
+
+	public void setFilePath(String filePath)
+	{
 		this.filePath = filePath;
 	}
-	
-	private static void copyAllRunsToAnotherParagraph(XWPFParagraph oldPar) {
-		for (XWPFRun run : oldPar.getRuns()) {
+
+	private static void copyAllRunsToAnotherParagraph(XWPFParagraph oldPar)
+	{
+		for (XWPFRun run : oldPar.getRuns())
+		{
 			Texts = run.getText(0);
-			if (Texts == null || Texts.isEmpty()) {
+			if (Texts == null || Texts.isEmpty())
+			{
 				continue;
 			}
-			//run.setText(Texts);
+			// run.setText(Texts);
 			run.getFontSize();
 			run.getUnderline();
 			run.getFontFamily();
@@ -57,24 +61,26 @@ public class DocReader {
 			run.isBold();
 			run.isItalic();
 			run.isStrike();
-			
+
 		}
 	}
-	
-	public String DocToText() throws IOException {
-		
+
+	public String DocToText() throws IOException
+	{
+
 		file = new File(fileName);
-		FileInputStream inputStream = new FileInputStream (file);
-		
-		HWPFDocument doc = new HWPFDocument (inputStream);
+		FileInputStream inputStream = new FileInputStream(file);
+
+		HWPFDocument doc = new HWPFDocument(inputStream);
 		WordExtractor extract = new WordExtractor(doc);
-		
+
 		Text = extract.getText();
 		return Text;
 	}
 
-	public void setFileName (String fileName) {
+	public void setFileName(String fileName)
+	{
 		this.fileName = fileName;
 	}
-	
+
 }

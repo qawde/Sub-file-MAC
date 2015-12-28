@@ -7,38 +7,44 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
-
-
-public class ExcelReader {
+public class ExcelReader
+{
 	private String inputFile;
-	
-	public void setInputFile(String inputFile) {
+
+	public void setInputFile(String inputFile)
+	{
 		this.inputFile = inputFile;
 	}
-	
-	public String read() throws IOException {
+
+	public String read() throws IOException
+	{
 		File inputWorkbook = new File(inputFile);
 		Workbook w;
-		
-		try {
+
+		try
+		{
 			w = Workbook.getWorkbook(inputWorkbook);
 			Sheet sheet = w.getSheet(0);
-			
-			for (int j = 0; j < sheet.getColumns(); j++) {
-				for (int i = 0; i < sheet.getRows(); i++) {
+
+			for (int j = 0; j < sheet.getColumns(); j++)
+			{
+				for (int i = 0; i < sheet.getRows(); i++)
+				{
 					Cell cell = sheet.getCell(j, i);
 					CellType type = cell.getType();
-					if (type == CellType.LABEL) {
+					if (type == CellType.LABEL)
+					{
 						System.out.println("I got a label" + cell.getContents());
 					}
-					
-					if (type == CellType.NUMBER) {
+
+					if (type == CellType.NUMBER)
+					{
 						System.out.println("I got a number" + cell.getContents());
 					}
 				}
 			}
-		}
-		catch(BiffException e) {
+		} catch (BiffException e)
+		{
 			e.printStackTrace();
 		}
 		return inputFile;
