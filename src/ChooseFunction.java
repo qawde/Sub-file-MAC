@@ -177,11 +177,12 @@ public class ChooseFunction extends JFrame
 								PdfWriter.getInstance(doc, new FileOutputStream("./temp file/" + of.filename));
 								doc.open();
 								String breaking[] = build.toString().split("\r\n|\r|\r");
+								//System.out.println(build);
 								for (int count = 0; count < breaking.length; count++)
 								{
 									Paragraph para = new Paragraph();
 									para.add(breaking[count]);
-									// System.out.println(/*breaking[count]*/para);
+									//System.out.println(para);
 									doc.add(para);
 								}
 								doc.close();

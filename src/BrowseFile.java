@@ -52,14 +52,20 @@ public class BrowseFile extends JFrame
 	private JPanel contentPane;
 	int firstIndex;
 	int lastIndex;
+	int policyfirstindex;
+	int policylastindex;
+	int mousefirstindex;
+	int mouselastindex;
 	String str;
 	String allText;
 	Highlighter hilit;
+	static StringBuilder build = new StringBuilder();
 	StringBuilder stringBuilder = new StringBuilder();
 	OpenFile of = new OpenFile();
 	Highlighter hl;
 	JTextArea tfFile = new JTextArea();
 	int remove = 0;
+	String path;
 
 	Highlighter.HighlightPainter redPainter = new MyHighlightPainter(Color.RED);
 	Highlighter.HighlightPainter yellowPainter = new MyHighlightPainter(Color.YELLOW);
@@ -115,21 +121,21 @@ public class BrowseFile extends JFrame
 			{
 				tfFile.setCaretPosition(tfFile.viewToModel(e.getPoint()));
 				firstIndex = tfFile.getCaretPosition();
-				System.out.println(firstIndex);
+				//System.out.println(firstIndex);
 			}
 
 			public void mouseReleased(MouseEvent e)
 			{
 				tfFile.setCaretPosition(tfFile.viewToModel(e.getPoint()));
 				lastIndex = tfFile.getCaretPosition();
-				System.out.println(lastIndex);
+				//System.out.println(lastIndex);
 				JTextArea s = (JTextArea) e.getSource();
 
 				str = s.getSelectedText();
 				if (tfFile.getSelectedText() != null)
 				{
 					str = tfFile.getSelectedText();
-					// System.out.println(str);
+					//System.out.println(str);
 				}
 			}
 		});
@@ -172,6 +178,13 @@ public class BrowseFile extends JFrame
 				if (remove != 0)
 				{
 					f.delete();
+					try
+					{
+						f.createNewFile();
+					} catch (IOException e1)
+					{
+						e1.printStackTrace();
+					}
 					JOptionPane.showMessageDialog(contentPane, "Save Successful");
 					remove = 0;
 				} else
@@ -199,25 +212,102 @@ public class BrowseFile extends JFrame
 							stringBuilder.append("4");
 						}
 						stringBuilder.append("|");
+						mousefirstindex=hL[i].getStartOffset();
+						mouselastindex=hL[i].getEndOffset();
+						//System.out.println(mousefirstindex);
+						//System.out.println(mouselastindex);
 					}
+					
 					BufferedWriter writer = null;
 					try
 					{
-
 						if (!f.exists())
 							f.createNewFile();
 						else
-							/*
-							 * checking if(fi=<lasti){
-							 * 
-							 * }
-							 */
+						f.setReadOnly();							
+						BufferedReader br = new BufferedReader(new FileReader(f));
+						String line;
+						StringBuilder sb = new StringBuilder();
+						while ((line = br.readLine()) != null)
+						{
+							sb.append(line);
+						}
+						br.close();
+						if (sb.toString().contains("|"))
+						{
+							//build = new StringBuilder(of.sb.toString());
+							String[] high = sb.toString().split(Pattern.quote("|"));
 
+							for (int i = 0; i < high.length; i++)
+							{
+								String[] details = high[i].split(Pattern.quote(","));
+								policyfirstindex = Integer.parseInt(details[0]);//policy indexes
+								policylastindex = Integer.parseInt(details[1]);
+								//System.out.println(policyfirstindex);
+								//System.out.println(policylastindex);
+							}
+						}
+							
+						if (f.length()==0) 
+						{
 							f.delete();
-						writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
-						writer.write(stringBuilder.toString());
-						stringBuilder.setLength(0);
-						remove = 0;
+							writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
+							//System.out.print(f.getAbsolutePath());
+							writer.write(stringBuilder.toString());
+							//System.out.print(stringBuilder);
+							stringBuilder.setLength(0);
+							remove = 0;
+						}
+						else if(policylastindex < mousefirstindex)
+						{
+							if (policyfirstindex < mousefirstindex)
+							{
+								f.delete();
+								writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
+								//System.out.print(f.getAbsolutePath());
+								writer.write(stringBuilder.toString());
+								//System.out.print(stringBuilder);
+								stringBuilder.setLength(0);
+								remove = 0;
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(contentPane, "double highlight");
+								//tfFile.setText(of.sb.toString());
+								stringBuilder.setLength(0);
+								removeHighlights(tfFile);
+								choose();
+							}
+						} 
+						else if (policyfirstindex > mousefirstindex)
+						{
+							if (policyfirstindex > mouselastindex)
+							{
+								f.delete();
+								writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
+								//System.out.print(f.getAbsolutePath());
+								writer.write(stringBuilder.toString());
+								//System.out.print(stringBuilder);
+								stringBuilder.setLength(0);
+								remove = 0;
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(contentPane, "double highlight");
+								//tfFile.setText(of.sb.toString());
+								stringBuilder.setLength(0);
+								removeHighlights(tfFile);
+								choose();
+							}
+						} 
+						else
+						{
+							JOptionPane.showMessageDialog(contentPane, "double highlight");
+							//tfFile.setText(of.sb.toString());
+							stringBuilder.setLength(0);
+							removeHighlights(tfFile);
+							choose();
+						}
 					} catch (Exception ex)
 					{
 						ex.printStackTrace();
@@ -229,6 +319,10 @@ public class BrowseFile extends JFrame
 							{
 								writer.close();
 								JOptionPane.showMessageDialog(contentPane, "Save Successful");
+								//tfFile.setText(of.sb.toString());
+								stringBuilder.setLength(0);
+								removeHighlights(tfFile);
+								choose();
 							}
 						} catch (IOException ex)
 						{
@@ -373,7 +467,7 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				ChooseFunction choosefunction = new ChooseFunction(2);
+				ChooseFunction choosefunction = new ChooseFunction(0);
 				choosefunction.setVisible(true);
 				dispose();
 			}
