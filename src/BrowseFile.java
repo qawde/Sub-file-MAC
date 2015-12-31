@@ -66,6 +66,7 @@ public class BrowseFile extends JFrame
 	JTextArea tfFile = new JTextArea();
 	int remove = 0;
 	String path;
+	JLabel lblPath = new JLabel();
 
 	Highlighter.HighlightPainter redPainter = new MyHighlightPainter(Color.RED);
 	Highlighter.HighlightPainter yellowPainter = new MyHighlightPainter(Color.YELLOW);
@@ -145,6 +146,11 @@ public class BrowseFile extends JFrame
 		tfFile.setVisible(true);
 		contentPane.add(tfFile);
 
+		lblPath.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblPath.setBounds(200, 57, 440, 50);
+		contentPane.add(lblPath);
+		lblPath.setVisible(false);
+		
 		JButton btnBrowse = new JButton("Browse");
 		btnBrowse.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
 		btnBrowse.addActionListener(new ActionListener()
@@ -161,8 +167,12 @@ public class BrowseFile extends JFrame
 				}
 				tfFile.setText(of.sb.toString());
 				choose();
-
+				
+				path = of.filePath;
+				lblPath.setText("File opened: " + path);
+				lblPath.setVisible(true);
 			}
+			
 		});
 		btnBrowse.setBounds(40, 70, 150, 23);
 		contentPane.add(btnBrowse);
@@ -457,10 +467,13 @@ public class BrowseFile extends JFrame
 		contentPane.add(btnCategoryD);
 
 		JLabel lblSecurityPolicyGenerator = new JLabel("Security Policy Generator");
-		lblSecurityPolicyGenerator.setFont(new Font("Tahoma", Font.PLAIN, 32));
-		lblSecurityPolicyGenerator.setBounds(287, 29, 440, 49);
+		lblSecurityPolicyGenerator.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		lblSecurityPolicyGenerator.setBounds(287, 10, 440, 49);
 		contentPane.add(lblSecurityPolicyGenerator);
 
+		
+		
+		
 		JButton btnBack = new JButton("Back");
 		btnBack.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
 		btnBack.addActionListener(new ActionListener()
@@ -493,7 +506,7 @@ public class BrowseFile extends JFrame
 	 * Highlighter.HighlightPainter myHighlightPainter = new
 	 * MyHighlightPainter(Color.RED);
 	 */
-
+ 
 	public void choose()
 	{
 		File f = new File("./indexes/" + of.filename + ".policy");
