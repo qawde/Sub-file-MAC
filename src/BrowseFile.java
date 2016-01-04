@@ -56,6 +56,7 @@ public class BrowseFile extends JFrame
 	int policylastindex;
 	int mousefirstindex;
 	int mouselastindex;
+	int policyaccesslevel;
 	String str;
 	String allText;
 	Highlighter hilit;
@@ -66,12 +67,13 @@ public class BrowseFile extends JFrame
 	JTextArea tfFile = new JTextArea();
 	int remove = 0;
 	String path;
-	JLabel lblPath = new JLabel();
+	
 
 	Highlighter.HighlightPainter redPainter = new MyHighlightPainter(Color.RED);
 	Highlighter.HighlightPainter yellowPainter = new MyHighlightPainter(Color.YELLOW);
 	Highlighter.HighlightPainter pinkPainter = new MyHighlightPainter(Color.PINK);
 	Highlighter.HighlightPainter bluePainter = new MyHighlightPainter(Color.CYAN);
+	Highlighter.HighlightPainter grayPainter = new MyHighlightPainter(Color. GRAY);
 
 	/*
 	 * String fileName = of.filename; File f= new File("./indexes/" + fileName +
@@ -120,14 +122,14 @@ public class BrowseFile extends JFrame
 		{
 			public void mousePressed(MouseEvent e)
 			{
-				tfFile.setCaretPosition(tfFile.viewToModel(e.getPoint()));
+				//tfFile.setCaretPosition(tfFile.viewToModel(e.getPoint()));
 				firstIndex = tfFile.getCaretPosition();
 				//System.out.println(firstIndex);
 			}
 
 			public void mouseReleased(MouseEvent e)
 			{
-				tfFile.setCaretPosition(tfFile.viewToModel(e.getPoint()));
+				//tfFile.setCaretPosition(tfFile.viewToModel(e.getPoint()));
 				lastIndex = tfFile.getCaretPosition();
 				//System.out.println(lastIndex);
 				JTextArea s = (JTextArea) e.getSource();
@@ -137,15 +139,26 @@ public class BrowseFile extends JFrame
 				{
 					str = tfFile.getSelectedText();
 					//System.out.println(str);
-				}
+				}	
 			}
+		    @Override
+		    public void mouseEntered(MouseEvent e) {}
+
+		    @Override
+		    public void mouseExited(MouseEvent e) {}
+		    
+		    @Override
+		    public void mouseClicked(MouseEvent e) {}
 		});
 
 		tfFile.setEditable(false);
 		tfFile.setBounds(40, 115, 761, 430);
 		tfFile.setVisible(true);
+		
+		
 		contentPane.add(tfFile);
-
+		
+		JLabel lblPath = new JLabel();
 		lblPath.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblPath.setBounds(200, 57, 440, 50);
 		contentPane.add(lblPath);
@@ -167,10 +180,18 @@ public class BrowseFile extends JFrame
 				}
 				tfFile.setText(of.sb.toString());
 				choose();
-				
 				path = of.filePath;
-				lblPath.setText("File opened: " + path);
-				lblPath.setVisible(true);
+				
+				if(path!=null)
+				{
+					lblPath.setText("File opened: " + path);
+					lblPath.setVisible(true);
+				}
+				else
+				{
+					lblPath.setText(" ");
+					lblPath.setVisible(true);
+				}
 			}
 			
 		});
@@ -185,6 +206,7 @@ public class BrowseFile extends JFrame
 			{
 
 				File f = new File("./indexes/" + of.filename + ".policy");
+				
 				if (remove != 0)
 				{
 					f.delete();
@@ -197,7 +219,9 @@ public class BrowseFile extends JFrame
 					}
 					JOptionPane.showMessageDialog(contentPane, "Save Successful");
 					remove = 0;
-				} else
+				} 
+				
+				else
 				{
 					Highlighter.Highlight[] hL = hilit.getHighlights();
 					for (int i = 0; i < hL.length; i++)
@@ -253,8 +277,11 @@ public class BrowseFile extends JFrame
 								String[] details = high[i].split(Pattern.quote(","));
 								policyfirstindex = Integer.parseInt(details[0]);//policy indexes
 								policylastindex = Integer.parseInt(details[1]);
-								//System.out.println(policyfirstindex);
-								//System.out.println(policylastindex);
+								policyaccesslevel = Integer.parseInt(details[2]);
+								System.out.println("First index: "+ policyfirstindex);
+								System.out.println("Second index: "+ policylastindex);
+								System.out.println("Access level: "+ policyaccesslevel);
+								System.out.println("=======================");
 							}
 						}
 							
@@ -268,7 +295,7 @@ public class BrowseFile extends JFrame
 							stringBuilder.setLength(0);
 							remove = 0;
 						}
-						else if(policylastindex < mousefirstindex)
+						/*else if(policylastindex < mousefirstindex)
 						{
 							if (policyfirstindex < mousefirstindex)
 							{
@@ -309,14 +336,22 @@ public class BrowseFile extends JFrame
 								removeHighlights(tfFile);
 								choose();
 							}
-						} 
+						}*/ 
 						else
 						{
-							JOptionPane.showMessageDialog(contentPane, "double highlight");
+							/*JOptionPane.showMessageDialog(contentPane, "double highlight");
 							//tfFile.setText(of.sb.toString());
 							stringBuilder.setLength(0);
 							removeHighlights(tfFile);
-							choose();
+							choose();*/
+							
+							f.delete();
+							writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
+							//System.out.print(f.getAbsolutePath());
+							writer.write(stringBuilder.toString());
+							//System.out.print(stringBuilder);
+							stringBuilder.setLength(0);
+							remove = 0;
 						}
 					} catch (Exception ex)
 					{
@@ -332,6 +367,7 @@ public class BrowseFile extends JFrame
 								//tfFile.setText(of.sb.toString());
 								stringBuilder.setLength(0);
 								removeHighlights(tfFile);
+								remove = 0;
 								choose();
 							}
 						} catch (IOException ex)
@@ -468,7 +504,7 @@ public class BrowseFile extends JFrame
 
 		JLabel lblSecurityPolicyGenerator = new JLabel("Security Policy Generator");
 		lblSecurityPolicyGenerator.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblSecurityPolicyGenerator.setBounds(287, 10, 440, 49);
+		lblSecurityPolicyGenerator.setBounds(296, 11, 339, 49);
 		contentPane.add(lblSecurityPolicyGenerator);
 
 		
