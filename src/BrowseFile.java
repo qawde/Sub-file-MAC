@@ -132,14 +132,14 @@ public class BrowseFile extends JFrame
 				//tfFile.setCaretPosition(tfFile.viewToModel(e.getPoint()));
 				lastIndex = tfFile.getCaretPosition();
 				//System.out.println(lastIndex);
-				JTextArea s = (JTextArea) e.getSource();
-
+				/*JTextArea s = (JTextArea) e.getSource();
+				System.out.println(s);
 				str = s.getSelectedText();
 				if (tfFile.getSelectedText() != null)
 				{
 					str = tfFile.getSelectedText();
 					//System.out.println(str);
-				}	
+				}*/
 			}
 		    @Override
 		    public void mouseEntered(MouseEvent e) {}
@@ -278,10 +278,10 @@ public class BrowseFile extends JFrame
 								policyfirstindex = Integer.parseInt(details[0]);//policy indexes
 								policylastindex = Integer.parseInt(details[1]);
 								policyaccesslevel = Integer.parseInt(details[2]);
-								System.out.println("First index: "+ policyfirstindex);
+								/*System.out.println("First index: "+ policyfirstindex);
 								System.out.println("Second index: "+ policylastindex);
 								System.out.println("Access level: "+ policyaccesslevel);
-								System.out.println("=======================");
+								System.out.println("=======================");*/
 							}
 						}
 							
@@ -524,7 +524,7 @@ public class BrowseFile extends JFrame
 		btnBack.setBounds(811, 518, 162, 23);
 		contentPane.add(btnBack);
 
-		JButton btnRemove = new JButton("Remove Highlights");
+		JButton btnRemove = new JButton("Remove All Highlights");
 		btnRemove.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
 		btnRemove.addActionListener(new ActionListener()
 		{
