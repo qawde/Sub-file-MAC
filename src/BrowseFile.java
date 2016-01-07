@@ -141,20 +141,11 @@ public class BrowseFile extends JFrame
 					//System.out.println(str);
 				}*/
 			}
-		    @Override
-		    public void mouseEntered(MouseEvent e) {}
-
-		    @Override
-		    public void mouseExited(MouseEvent e) {}
-		    
-		    @Override
-		    public void mouseClicked(MouseEvent e) {}
 		});
 
 		tfFile.setEditable(false);
 		tfFile.setBounds(40, 115, 761, 430);
 		tfFile.setVisible(true);
-		
 		
 		contentPane.add(tfFile);
 		
@@ -271,18 +262,37 @@ public class BrowseFile extends JFrame
 						{
 							//build = new StringBuilder(of.sb.toString());
 							String[] high = sb.toString().split(Pattern.quote("|"));
-
 							for (int i = 0; i < high.length; i++)
 							{
 								String[] details = high[i].split(Pattern.quote(","));
+								
 								policyfirstindex = Integer.parseInt(details[0]);//policy indexes
+								List<Integer> listofFi = new ArrayList<Integer>();//example
+								listofFi.add(policyfirstindex);
+								
 								policylastindex = Integer.parseInt(details[1]);
+								List<Integer> listofLi = new ArrayList<Integer>();//example
+								listofLi.add(policylastindex);
+								
 								policyaccesslevel = Integer.parseInt(details[2]);
+								List<Integer> listofAl = new ArrayList<Integer>();//example
+								listofAl.add(policyaccesslevel);
+								
+								
 								/*System.out.println("First index: "+ policyfirstindex);
 								System.out.println("Second index: "+ policylastindex);
 								System.out.println("Access level: "+ policyaccesslevel);
 								System.out.println("=======================");*/
+								
+								for(int k = 0; k < listofFi.size(); k++){//example
+									System.out.println("First index: "+ listofFi.get(k));
+									System.out.println("Second index: "+ listofLi.get(k));
+									System.out.println("Access level: "+ listofAl.get(k));
+									System.out.println();
+								}
 							}
+							
+							
 						}
 							
 						if (f.length()==0) 
@@ -294,6 +304,7 @@ public class BrowseFile extends JFrame
 							//System.out.print(stringBuilder);
 							stringBuilder.setLength(0);
 							remove = 0;
+							choose();
 						}
 						/*else if(policylastindex < mousefirstindex)
 						{
@@ -352,6 +363,7 @@ public class BrowseFile extends JFrame
 							//System.out.print(stringBuilder);
 							stringBuilder.setLength(0);
 							remove = 0;
+							choose();
 						}
 					} catch (Exception ex)
 					{
@@ -507,9 +519,6 @@ public class BrowseFile extends JFrame
 		lblSecurityPolicyGenerator.setBounds(296, 11, 339, 49);
 		contentPane.add(lblSecurityPolicyGenerator);
 
-		
-		
-		
 		JButton btnBack = new JButton("Back");
 		btnBack.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
 		btnBack.addActionListener(new ActionListener()
@@ -537,11 +546,6 @@ public class BrowseFile extends JFrame
 		btnRemove.setBounds(811, 395, 162, 23);
 		contentPane.add(btnRemove);
 	}
-
-	/*
-	 * Highlighter.HighlightPainter myHighlightPainter = new
-	 * MyHighlightPainter(Color.RED);
-	 */
  
 	public void choose()
 	{
@@ -578,18 +582,18 @@ public class BrowseFile extends JFrame
 						{
 							hilit.addHighlight(Integer.parseInt(details[0]), Integer.parseInt(details[1]), redPainter);
 						}
-
 						else if (details[2].equalsIgnoreCase("2"))
 						{
 							hilit.addHighlight(Integer.parseInt(details[0]), Integer.parseInt(details[1]), yellowPainter);
-						} else if (details[2].equalsIgnoreCase("3"))
+						} 
+						else if (details[2].equalsIgnoreCase("3"))
 						{
 							hilit.addHighlight(Integer.parseInt(details[0]), Integer.parseInt(details[1]), pinkPainter);
-						} else if (details[2].equalsIgnoreCase("4"))
+						} 
+						else if (details[2].equalsIgnoreCase("4"))
 						{
 							hilit.addHighlight(Integer.parseInt(details[0]), Integer.parseInt(details[1]), bluePainter);
 						}
-
 					}
 				}
 			} catch (Exception ex)
@@ -608,7 +612,15 @@ public class BrowseFile extends JFrame
 
 		}
 	}
-
+	
+	class HighlightPainter extends DefaultHighlighter.DefaultHighlightPainter
+	{
+		public HighlightPainter(Color c)
+		{
+			super(c);
+		}
+	}
+	
 	public void redHighlight(JTextComponent textComp)
 	{
 
@@ -706,14 +718,6 @@ public class BrowseFile extends JFrame
 		} catch (BadLocationException e)
 		{
 			e.printStackTrace();
-		}
-	}
-
-	class HighlightPainter extends DefaultHighlighter.DefaultHighlightPainter
-	{
-		public HighlightPainter(Color c)
-		{
-			super(c);
 		}
 	}
 

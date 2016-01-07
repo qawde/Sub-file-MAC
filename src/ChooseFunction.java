@@ -40,7 +40,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import javax.swing.SwingConstants;
 
 import java.awt.Font;
-//hihihi
+
 public class ChooseFunction extends JFrame
 {
 
@@ -124,7 +124,7 @@ public class ChooseFunction extends JFrame
 					ex.printStackTrace();
 				}
 
-				char symbols = '\u25E6';
+				char symbols ='*';// '\u25E6';
 				
 				try
 				{
@@ -165,6 +165,7 @@ public class ChooseFunction extends JFrame
 							if (detail <= accessID)
 							{
 								build.replace(firstindex, lastindex, longsymbols);
+								System.out.println(build);
 							}
 						}
 						
