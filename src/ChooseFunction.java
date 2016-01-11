@@ -124,7 +124,7 @@ public class ChooseFunction extends JFrame
 					ex.printStackTrace();
 				}
 
-				char symbols ='\u25E6';
+				char symbols ='*';//'\u25E6';
 				
 				try
 				{
