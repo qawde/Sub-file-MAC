@@ -275,7 +275,7 @@ public class BrowseFile extends JFrame
 
 			}
 		});
-		btnSave.setBounds(811, 462, 162, 23);
+		btnSave.setBounds(811, 467, 162, 23);
 		contentPane.add(btnSave);
 
 		JScrollPane scrollPane = new JScrollPane(tfFile);
@@ -285,6 +285,19 @@ public class BrowseFile extends JFrame
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		contentPane.add(scrollPane);
 
+		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
+		btnRefresh.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				removeHighlights(tfFile);
+				choose();
+			}
+		});
+		btnRefresh.setBounds(811, 118, 162, 23);
+		contentPane.add(btnRefresh);
+		
 		JButton btnCategoryA = new JButton("Security Level 1");
 		btnCategoryA.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
 		btnCategoryA.setBackground(Color.RED);
@@ -307,7 +320,7 @@ public class BrowseFile extends JFrame
 				}
 			}
 		});
-		btnCategoryA.setBounds(811, 115, 162, 23);
+		btnCategoryA.setBounds(811, 177, 162, 23);
 		contentPane.add(btnCategoryA);
 
 		JButton btnCategoryB = new JButton("Security Level 2");
@@ -333,7 +346,7 @@ public class BrowseFile extends JFrame
 				}
 			}
 		});
-		btnCategoryB.setBounds(811, 185, 162, 23);
+		btnCategoryB.setBounds(811, 236, 162, 23);
 		contentPane.add(btnCategoryB);
 
 		JButton btnCategoryC = new JButton("Security Level 3");
@@ -359,7 +372,7 @@ public class BrowseFile extends JFrame
 				}
 			}
 		});
-		btnCategoryC.setBounds(811, 255, 162, 23);
+		btnCategoryC.setBounds(811, 296, 162, 23);
 		contentPane.add(btnCategoryC);
 
 		JButton btnCategoryD = new JButton("Security Level 4");
@@ -384,7 +397,7 @@ public class BrowseFile extends JFrame
 				}
 			}
 		});
-		btnCategoryD.setBounds(811, 325, 162, 23);
+		btnCategoryD.setBounds(811, 361, 162, 23);
 		contentPane.add(btnCategoryD);
 
 		JLabel lblSecurityPolicyGenerator = new JLabel("Security Policy Generator");
@@ -416,7 +429,7 @@ public class BrowseFile extends JFrame
 				remove = 1;	
 			}
 		});
-		btnRemove.setBounds(811, 395, 162, 23);
+		btnRemove.setBounds(811, 414, 162, 23);
 		contentPane.add(btnRemove);
 	}
  
