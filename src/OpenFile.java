@@ -35,7 +35,6 @@ public class OpenFile
 		int result = fc.showOpenDialog(null);
 		if (result == JFileChooser.APPROVE_OPTION)
 		{
-
 			File selectedFile = fc.getSelectedFile();
 			filename = selectedFile.getName();
 			filePath = selectedFile.getAbsolutePath();
@@ -72,7 +71,6 @@ public class OpenFile
 				DocReader docReader = new DocReader();
 				docReader.setFilePath(selectedFile.getAbsolutePath());
 				sb = new StringBuilder(docReader.DocxToText());
-				// }
 			} else if (txt.equalsIgnoreCase(extension))
 			{
 

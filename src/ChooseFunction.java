@@ -124,7 +124,7 @@ public class ChooseFunction extends JFrame
 					ex.printStackTrace();
 				}
 
-				char symbols ='*';// '\u25E6';
+				char symbols ='\u25E6';
 				
 				try
 				{
@@ -144,11 +144,9 @@ public class ChooseFunction extends JFrame
 						String txt = "txt";
 						String docx = "docx";
 						String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
-						// File newfile2 = new File("./temp file 2/" + of.filename);
 						
 						File newfile = new File("./temp file/" + of.filename);
 						build = new StringBuilder(of.sb.toString());
-						
 						String[] high = sb.toString().split(Pattern.quote("|"));
 						for (int i = 0; i < high.length; i++)
 						{
@@ -165,7 +163,6 @@ public class ChooseFunction extends JFrame
 							if (detail <= accessID)
 							{
 								build.replace(firstindex, lastindex, longsymbols);
-								System.out.println(build);
 							}
 						}
 						
@@ -177,12 +174,10 @@ public class ChooseFunction extends JFrame
 								PdfWriter.getInstance(document, new FileOutputStream("./temp file/" + of.filename));
 								document.open();
 								String breaking[] = build.toString().split("\r\n|\r|\r");
-								//System.out.println(build);
 								for (int count = 0; count < breaking.length; count++)
 								{
 									Paragraph para = new Paragraph();
 									para.add(breaking[count]);
-									//System.out.println(para);
 									document.add(para);
 								}
 								document.close();
@@ -199,6 +194,7 @@ public class ChooseFunction extends JFrame
 									FileInputStream is = new FileInputStream(of.filePath);
 									XWPFDocument doc = new XWPFDocument(is);
 									List<XWPFParagraph> paras = doc.getParagraphs();
+									System.out.println(paras);
 									XWPFDocument newdoc = new XWPFDocument();
 
 									String test[] = build.toString().split("\r\n|\r|\n");
@@ -214,6 +210,7 @@ public class ChooseFunction extends JFrame
 												para.removeRun(i);
 											}
 											XWPFRun run = runs.get(0);
+											
 											run.setText(test[count], 0);
 											newpara.addRun(run);
 											copyAllRunsToAnotherParagraph(para, newpara, test[count]);
@@ -258,7 +255,7 @@ public class ChooseFunction extends JFrame
 						}
 					}
 					
-				else if (f.length()==0)
+					else if (f.length()==0)
 					{
 						String pdf = "pdf";
 						String txt = "txt";

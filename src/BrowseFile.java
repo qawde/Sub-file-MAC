@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -52,11 +53,8 @@ public class BrowseFile extends JFrame
 	private JPanel contentPane;
 	int firstIndex;
 	int lastIndex;
-	int policyfirstindex;
-	int policylastindex;
 	int mousefirstindex;
 	int mouselastindex;
-	int policyaccesslevel;
 	String str;
 	String allText;
 	Highlighter hilit;
@@ -122,24 +120,12 @@ public class BrowseFile extends JFrame
 		{
 			public void mousePressed(MouseEvent e)
 			{
-				//tfFile.setCaretPosition(tfFile.viewToModel(e.getPoint()));
 				firstIndex = tfFile.getCaretPosition();
-				//System.out.println(firstIndex);
 			}
 
 			public void mouseReleased(MouseEvent e)
 			{
-				//tfFile.setCaretPosition(tfFile.viewToModel(e.getPoint()));
 				lastIndex = tfFile.getCaretPosition();
-				//System.out.println(lastIndex);
-				/*JTextArea s = (JTextArea) e.getSource();
-				System.out.println(s);
-				str = s.getSelectedText();
-				if (tfFile.getSelectedText() != null)
-				{
-					str = tfFile.getSelectedText();
-					//System.out.println(str);
-				}*/
 			}
 		});
 
@@ -243,124 +229,23 @@ public class BrowseFile extends JFrame
 						//System.out.println(mouselastindex);
 					}
 					
-					BufferedWriter writer = null;
-					try
-					{
-						if (!f.exists())
-							f.createNewFile();
-						else
-						f.setReadOnly();							
-						BufferedReader br = new BufferedReader(new FileReader(f));
-						String line;
-						StringBuilder sb = new StringBuilder();
-						while ((line = br.readLine()) != null)
-						{
-							sb.append(line);
-						}
-						br.close();
-						if (sb.toString().contains("|"))
-						{
-							//build = new StringBuilder(of.sb.toString());
-							String[] high = sb.toString().split(Pattern.quote("|"));
-							for (int i = 0; i < high.length; i++)
-							{
-								String[] details = high[i].split(Pattern.quote(","));
-								
-								policyfirstindex = Integer.parseInt(details[0]);//policy indexes
-								List<Integer> listofFi = new ArrayList<Integer>();//example
-								listofFi.add(policyfirstindex);
-								
-								policylastindex = Integer.parseInt(details[1]);
-								List<Integer> listofLi = new ArrayList<Integer>();//example
-								listofLi.add(policylastindex);
-								
-								policyaccesslevel = Integer.parseInt(details[2]);
-								List<Integer> listofAl = new ArrayList<Integer>();//example
-								listofAl.add(policyaccesslevel);
-								
-								
-								/*System.out.println("First index: "+ policyfirstindex);
-								System.out.println("Second index: "+ policylastindex);
-								System.out.println("Access level: "+ policyaccesslevel);
-								System.out.println("=======================");*/
-								
-								for(int k = 0; k < listofFi.size(); k++){//example
-									System.out.println("First index: "+ listofFi.get(k));
-									System.out.println("Second index: "+ listofLi.get(k));
-									System.out.println("Access level: "+ listofAl.get(k));
-									System.out.println();
-								}
-							}
-							
-							
-						}
-							
+					BufferedWriter writer = null;	
+					try{	
+						
 						if (f.length()==0) 
 						{
 							f.delete();
 							writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
-							//System.out.print(f.getAbsolutePath());
 							writer.write(stringBuilder.toString());
-							//System.out.print(stringBuilder);
 							stringBuilder.setLength(0);
 							remove = 0;
 							choose();
 						}
-						/*else if(policylastindex < mousefirstindex)
-						{
-							if (policyfirstindex < mousefirstindex)
-							{
-								f.delete();
-								writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
-								//System.out.print(f.getAbsolutePath());
-								writer.write(stringBuilder.toString());
-								//System.out.print(stringBuilder);
-								stringBuilder.setLength(0);
-								remove = 0;
-							}
-							else
-							{
-								JOptionPane.showMessageDialog(contentPane, "double highlight");
-								//tfFile.setText(of.sb.toString());
-								stringBuilder.setLength(0);
-								removeHighlights(tfFile);
-								choose();
-							}
-						} 
-						else if (policyfirstindex > mousefirstindex)
-						{
-							if (policyfirstindex > mouselastindex)
-							{
-								f.delete();
-								writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
-								//System.out.print(f.getAbsolutePath());
-								writer.write(stringBuilder.toString());
-								//System.out.print(stringBuilder);
-								stringBuilder.setLength(0);
-								remove = 0;
-							}
-							else
-							{
-								JOptionPane.showMessageDialog(contentPane, "double highlight");
-								//tfFile.setText(of.sb.toString());
-								stringBuilder.setLength(0);
-								removeHighlights(tfFile);
-								choose();
-							}
-						}*/ 
 						else
 						{
-							/*JOptionPane.showMessageDialog(contentPane, "double highlight");
-							//tfFile.setText(of.sb.toString());
-							stringBuilder.setLength(0);
-							removeHighlights(tfFile);
-							choose();*/
-							
 							f.delete();
 							writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
-							//System.out.print(f.getAbsolutePath());
 							writer.write(stringBuilder.toString());
-							//System.out.print(stringBuilder);
 							stringBuilder.setLength(0);
 							remove = 0;
 							choose();
@@ -376,7 +261,6 @@ public class BrowseFile extends JFrame
 							{
 								writer.close();
 								JOptionPane.showMessageDialog(contentPane, "Save Successful");
-								//tfFile.setText(of.sb.toString());
 								stringBuilder.setLength(0);
 								removeHighlights(tfFile);
 								remove = 0;
@@ -408,7 +292,6 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				/* Highlighter highlighter = File.getHighlighter(); */
 				hilit = tfFile.getHighlighter();
 				if (hilit.getHighlights() != null)
 				{
@@ -422,7 +305,6 @@ public class BrowseFile extends JFrame
 					}
 					redHighlight(tfFile);
 				}
-
 			}
 		});
 		btnCategoryA.setBounds(811, 115, 162, 23);
@@ -435,7 +317,6 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				/* Highlighter highlighter = File.getHighlighter(); */
 				hilit = tfFile.getHighlighter();
 				if (hilit.getHighlights() != null)
 				{
@@ -450,7 +331,6 @@ public class BrowseFile extends JFrame
 					}
 					yellowHighlight(tfFile);
 				}
-
 			}
 		});
 		btnCategoryB.setBounds(811, 185, 162, 23);
@@ -463,12 +343,11 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				/* Highlighter highlighter = File.getHighlighter(); */
+				
 				hilit = tfFile.getHighlighter();
 				if (hilit.getHighlights() != null)
 				{
 					Highlighter.Highlight[] hL = hilit.getHighlights();
-					// redHighlight(File);
 					for (int i = 0; i < hL.length; i++)
 					{
 						if ((hL[i].getStartOffset() == firstIndex) && (hL[i].getEndOffset() == lastIndex))
@@ -477,9 +356,7 @@ public class BrowseFile extends JFrame
 						}
 					}
 					pinkHighlight(tfFile);
-
 				}
-
 			}
 		});
 		btnCategoryC.setBounds(811, 255, 162, 23);
@@ -492,12 +369,10 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				/* Highlighter highlighter = File.getHighlighter(); */
 				hilit = tfFile.getHighlighter();
 				if (hilit.getHighlights() != null)
 				{
 					Highlighter.Highlight[] hL = hilit.getHighlights();
-					// redHighlight(File);
 					for (int i = 0; i < hL.length; i++)
 					{
 						if ((hL[i].getStartOffset() == firstIndex) && (hL[i].getEndOffset() == lastIndex))
@@ -506,9 +381,7 @@ public class BrowseFile extends JFrame
 						}
 					}
 					blueHighlight(tfFile);
-
 				}
-
 			}
 		});
 		btnCategoryD.setBounds(811, 325, 162, 23);
@@ -540,7 +413,7 @@ public class BrowseFile extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				removeHighlights(tfFile);
-				remove = 1;
+				remove = 1;	
 			}
 		});
 		btnRemove.setBounds(811, 395, 162, 23);
@@ -747,5 +620,89 @@ public class BrowseFile extends JFrame
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public int checkAbleHilite(int mousefirstindex, int mouselastindex, int accesslevel)
+	{
+			List<Integer> listofFi = new ArrayList<Integer>();//example
+			List<Integer> listofLi = new ArrayList<Integer>();//example
+			List<Integer> listofAl = new ArrayList<Integer>();//example
+			int policyfirstindex;
+			int policylastindex;
+			int policyaccesslevel;
+			int fiCheckResult = 0;
+			int liCheckResult = 0;
+			int alCheckResult = 0;
+			int approve = 0;
+			int fiPassed=0;
+			int liPassed=0;
+			File f = new File("./indexes/" + "test.txt" + ".policy");
+			
+			
+			f.setReadOnly();
+			
+			if (f.exists())
+			{
+				try
+				{
+					BufferedReader br = new BufferedReader(new FileReader(f));
+					String line;
+					StringBuilder sb = new StringBuilder();
+					while ((line = br.readLine()) != null)
+					{
+						sb.append(line);
+					}
+					br.close();
+					
+					if (sb.toString().contains("|"))
+					{
+						String[] high = sb.toString().split(Pattern.quote("|"));
+						for (int i = 0; i < high.length; i++)
+						{
+							String[] details = high[i].split(Pattern.quote(","));
+							
+							policyfirstindex = Integer.parseInt(details[0]);//policy indexes
+							listofFi.add(policyfirstindex);
+							
+							policylastindex = Integer.parseInt(details[1]);
+							listofLi.add(policylastindex);
+							
+							policyaccesslevel = Integer.parseInt(details[2]);
+							listofAl.add(policyaccesslevel);
+						}
+						
+						for(int k = 0; k < listofFi.size(); k++){//example
+							
+							if (mousefirstindex >= listofFi.get(k))
+							{
+								fiPassed++;
+							}
+						}
+						
+						
+						
+						if(fiCheckResult==1 && liCheckResult==1)
+						{
+							for(int h = 0; h < listofAl.size(); h++)
+							{
+								if(listofAl.get(fiPassed)<=accesslevel)
+								{
+									approve =1;
+								}
+								else
+								{
+									approve=0;
+								}
+							}
+						}
+						
+					}
+				} catch (Exception ex)
+				{
+					ex.printStackTrace();
+				}	
+		
+		}
+		return approve;
 	}
 }
