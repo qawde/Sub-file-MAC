@@ -39,13 +39,12 @@ public class testing
 		int alCheckResult = 0;
 		int mousefirstindex = 25;
 		int mouselastindex = 40;
-		int accesslevel = 3;
+		int accesslevel = 2;
 		int approve = 0;
 		int fiPassed=0;
 		int liPassed=0;
+		
 		File f = new File("./indexes/" + "test.txt" + ".policy");
-		
-		
 		f.setReadOnly();
 		
 		if (f.exists())
@@ -55,15 +54,18 @@ public class testing
 				BufferedReader br = new BufferedReader(new FileReader(f));
 				String line;
 				StringBuilder sb = new StringBuilder();
+			
 				while ((line = br.readLine()) != null)
 				{
 					sb.append(line);
 				}
 				br.close();
 				
+				
 				if (sb.toString().contains("|"))
 				{
 					String[] high = sb.toString().split(Pattern.quote("|"));
+					
 					for (int i = 0; i < high.length; i++)
 					{
 						String[] details = high[i].split(Pattern.quote(","));
@@ -76,7 +78,10 @@ public class testing
 						
 						policyaccesslevel = Integer.parseInt(details[2]);
 						listofAl.add(policyaccesslevel);
+						
 					}
+					
+					
 					
 					for(int k = 0; k < listofFi.size(); k++){//example
 						
@@ -88,11 +93,12 @@ public class testing
 					
 					
 					
-					if(fiCheckResult==1 && liCheckResult==1)
+					if(fiPassed!=0)
 					{
 						for(int h = 0; h < listofAl.size(); h++)
 						{
-							if(accesslevel< listofAl.get(fiPassed))
+							
+							if(listofAl.get(fiPassed-1)>= accesslevel )
 							{
 								approve =1;
 							}
@@ -102,12 +108,15 @@ public class testing
 							}
 						}
 					}
+					else
+					{
+						approve=0;
+					}
+					
 					
 				}
+				
 				System.out.println(fiPassed);
-				System.out.println(liPassed);
-				System.out.println(fiCheckResult);
-				System.out.println(liCheckResult);
 				System.out.println(approve);
 			} catch (Exception ex)
 			{
@@ -116,4 +125,5 @@ public class testing
 			
 		}
 	}
+
 }
