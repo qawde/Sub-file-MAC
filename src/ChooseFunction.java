@@ -124,8 +124,6 @@ public class ChooseFunction extends JFrame
 					ex.printStackTrace();
 				}
 
-				char symbols ='*';//'\u25E6';
-				
 				try
 				{
 					File f = new File("./indexes/" + of.filename + ".policy");
@@ -138,8 +136,9 @@ public class ChooseFunction extends JFrame
 						{
 							e1.printStackTrace();
 						}
-						BufferedReader br = new BufferedReader(new FileReader(f));
+						
 						String line;
+						BufferedReader br = new BufferedReader(new FileReader(f));
 						StringBuilder sb = new StringBuilder();
 						while ((line = br.readLine()) != null)
 						{
@@ -147,20 +146,20 @@ public class ChooseFunction extends JFrame
 						}
 						br.close();
 						
+						
 						if (sb.toString().contains("|"))
 						{
-							String pdf = "pdf";
-							String txt = "txt";
-							String docx = "docx";
-							String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
 							
+							String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
 							File newfile = new File("./temp file/" + of.filename);
 							build = new StringBuilder(of.sb.toString());
+							char symbols ='*';
+							
 							String[] high = sb.toString().split(Pattern.quote("|"));
 							for (int i = 0; i < high.length; i++)
 							{
 								String[] details = high[i].split(Pattern.quote(","));
-	
+
 								int firstindex = Integer.parseInt(details[0]);
 								int lastindex = Integer.parseInt(details[1]);
 								int detail = Integer.parseInt(details[2]);
@@ -168,197 +167,21 @@ public class ChooseFunction extends JFrame
 								char[] symbolArr = new char[length];
 								Arrays.fill(symbolArr, symbols);
 								String longsymbols = new String(symbolArr);
-	
+
 								if (detail <= accessID)
 								{
 									build.replace(firstindex, lastindex, longsymbols);
 								}
 							}
-							
-							try
-							{
-								if (pdf.equalsIgnoreCase(extension))
-								{
-									Document document = new Document(PageSize.A4);
-									PdfWriter.getInstance(document, new FileOutputStream("./temp file/" + of.filename));
-									document.open();
-									String breaking[] = build.toString().split("\r\n|\r|\r");
-									for (int count = 0; count < breaking.length; count++)
-									{
-										Paragraph para = new Paragraph();
-										para.add(breaking[count]);
-										document.add(para);
-									}
-									document.close();
-									if (Desktop.isDesktopSupported())
-									{
-										Desktop.getDesktop().open(newfile);
-									}
-								}
-	
-								else if (docx.equalsIgnoreCase(extension))
-								{
-									try
-									{
-										FileInputStream is = new FileInputStream(of.filePath);
-										XWPFDocument doc = new XWPFDocument(is);
-										List<XWPFParagraph> paras = doc.getParagraphs();
-										System.out.println(paras);
-										XWPFDocument newdoc = new XWPFDocument();
-	
-										String test[] = build.toString().split("\r\n|\r|\n");
-										int count = 0;
-										for (XWPFParagraph para : paras)
-										{
-											if (!para.getParagraphText().isEmpty())
-											{
-												XWPFParagraph newpara = newdoc.createParagraph();
-												List<XWPFRun> runs = para.getRuns();
-												for (int i = runs.size() - 1; i > 0; i--)
-												{
-													para.removeRun(i);
-												}
-												XWPFRun run = runs.get(0);
-												
-												run.setText(test[count], 0);
-												newpara.addRun(run);
-												copyAllRunsToAnotherParagraph(para, newpara, test[count]);
-												count++;
-											}
-										}
-										FileOutputStream fos = new FileOutputStream(new File("./temp file/" + of.filename));
-										newdoc.write(fos);
-										fos.flush();
-										fos.close();
-										if (Desktop.isDesktopSupported())
-										{
-											Desktop.getDesktop().open(newfile);
-										}
-									} catch (FileNotFoundException ex)
-									{
-										ex.printStackTrace();
-									} catch (IOException ex)
-									{
-										ex.printStackTrace();
-									}
-									
-								}
-	
-								else if (txt.equalsIgnoreCase(extension))
-								{
-	
-									Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./temp file/" + of.filename), Charset.forName("utf-8")));
-									{
-										writer.write(build.toString());
-										writer.close();
-										if (Desktop.isDesktopSupported())
-										{
-											Desktop.getDesktop().open(newfile);
-										}
-									}
-								}
-								
-							} catch (Exception ex)
-							{
-								ex.printStackTrace();
-							}
+							viewFile(extension, newfile, build);
 						}
 						
 						else if (f.length()==0)
 						{
-							String pdf = "pdf";
-							String txt = "txt";
-							String docx = "docx";
 							String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
-							
 							File newfile = new File("./temp file/" + of.filename);
 							build = new StringBuilder(of.sb.toString());
-							
-							try
-							{
-								if (pdf.equalsIgnoreCase(extension))
-								{
-									Document document = new Document(PageSize.A4);
-									PdfWriter.getInstance(document, new FileOutputStream("./temp file/" + of.filename));
-									document.open();
-									String breaking[] = build.toString().split("\r\n|\r|\r");
-									for (int count = 0; count < breaking.length; count++)
-									{
-										Paragraph para = new Paragraph();
-										para.add(breaking[count]);
-										document.add(para);
-									}
-									document.close();
-									if (Desktop.isDesktopSupported())
-									{
-										Desktop.getDesktop().open(newfile);
-									}
-								}
-	
-								else if (docx.equalsIgnoreCase(extension))
-								{
-									try
-									{
-										FileInputStream is = new FileInputStream(of.filePath);
-										XWPFDocument doc = new XWPFDocument(is);
-										List<XWPFParagraph> paras = doc.getParagraphs();
-										XWPFDocument newdoc = new XWPFDocument();
-	
-										String test[] = build.toString().split("\r\n|\r|\n");
-										int count = 0;
-										for (XWPFParagraph para : paras)
-										{
-											if (!para.getParagraphText().isEmpty())
-											{
-												XWPFParagraph newpara = newdoc.createParagraph();
-												List<XWPFRun> runs = para.getRuns();
-												for (int i = runs.size() - 1; i > 0; i--)
-												{
-													para.removeRun(i);
-												}
-												XWPFRun run = runs.get(0);
-												run.setText(test[count], 0);
-												newpara.addRun(run);
-												copyAllRunsToAnotherParagraph(para, newpara, test[count]);
-												count++;
-											}
-										}
-										FileOutputStream fos = new FileOutputStream(new File("./temp file/" + of.filename));
-										newdoc.write(fos);
-										fos.flush();
-										fos.close();
-										if (Desktop.isDesktopSupported())
-										{
-											Desktop.getDesktop().open(newfile);
-										}
-									} catch (FileNotFoundException ex)
-									{
-										ex.printStackTrace();
-									} catch (IOException ex)
-									{
-										ex.printStackTrace();
-									}
-									
-								}
-	
-								else if (txt.equalsIgnoreCase(extension))
-								{
-	
-									Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./temp file/" + of.filename), Charset.forName("utf-8")));
-									{
-										writer.write(build.toString());
-										writer.close();
-										if (Desktop.isDesktopSupported())
-										{
-											Desktop.getDesktop().open(newfile);
-										}
-									}
-								}
-								
-							} catch (Exception ex)
-							{
-								ex.printStackTrace();
-							}
+							viewFile(extension, newfile, build);
 						}
 					}
 					else
@@ -370,8 +193,9 @@ public class ChooseFunction extends JFrame
 						{
 							e1.printStackTrace();
 						}
-						BufferedReader br = new BufferedReader(new FileReader(f));
+						
 						String line;
+						BufferedReader br = new BufferedReader(new FileReader(f));
 						StringBuilder sb = new StringBuilder();
 						while ((line = br.readLine()) != null)
 						{
@@ -381,18 +205,16 @@ public class ChooseFunction extends JFrame
 						
 						if (sb.toString().contains("|"))
 						{
-							String pdf = "pdf";
-							String txt = "txt";
-							String docx = "docx";
 							String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
-							
 							File newfile = new File("./temp file/" + of.filename);
 							build = new StringBuilder(of.sb.toString());
+							char symbols ='*';
+							
 							String[] high = sb.toString().split(Pattern.quote("|"));
 							for (int i = 0; i < high.length; i++)
 							{
 								String[] details = high[i].split(Pattern.quote(","));
-	
+
 								int firstindex = Integer.parseInt(details[0]);
 								int lastindex = Integer.parseInt(details[1]);
 								int detail = Integer.parseInt(details[2]);
@@ -400,197 +222,21 @@ public class ChooseFunction extends JFrame
 								char[] symbolArr = new char[length];
 								Arrays.fill(symbolArr, symbols);
 								String longsymbols = new String(symbolArr);
-	
+
 								if (detail <= accessID)
 								{
 									build.replace(firstindex, lastindex, longsymbols);
 								}
 							}
-							
-							try
-							{
-								if (pdf.equalsIgnoreCase(extension))
-								{
-									Document document = new Document(PageSize.A4);
-									PdfWriter.getInstance(document, new FileOutputStream("./temp file/" + of.filename));
-									document.open();
-									String breaking[] = build.toString().split("\r\n|\r|\r");
-									for (int count = 0; count < breaking.length; count++)
-									{
-										Paragraph para = new Paragraph();
-										para.add(breaking[count]);
-										document.add(para);
-									}
-									document.close();
-									if (Desktop.isDesktopSupported())
-									{
-										Desktop.getDesktop().open(newfile);
-									}
-								}
-	
-								else if (docx.equalsIgnoreCase(extension))
-								{
-									try
-									{
-										FileInputStream is = new FileInputStream(of.filePath);
-										XWPFDocument doc = new XWPFDocument(is);
-										List<XWPFParagraph> paras = doc.getParagraphs();
-										System.out.println(paras);
-										XWPFDocument newdoc = new XWPFDocument();
-	
-										String test[] = build.toString().split("\r\n|\r|\n");
-										int count = 0;
-										for (XWPFParagraph para : paras)
-										{
-											if (!para.getParagraphText().isEmpty())
-											{
-												XWPFParagraph newpara = newdoc.createParagraph();
-												List<XWPFRun> runs = para.getRuns();
-												for (int i = runs.size() - 1; i > 0; i--)
-												{
-													para.removeRun(i);
-												}
-												XWPFRun run = runs.get(0);
-												
-												run.setText(test[count], 0);
-												newpara.addRun(run);
-												copyAllRunsToAnotherParagraph(para, newpara, test[count]);
-												count++;
-											}
-										}
-										FileOutputStream fos = new FileOutputStream(new File("./temp file/" + of.filename));
-										newdoc.write(fos);
-										fos.flush();
-										fos.close();
-										if (Desktop.isDesktopSupported())
-										{
-											Desktop.getDesktop().open(newfile);
-										}
-									} catch (FileNotFoundException ex)
-									{
-										ex.printStackTrace();
-									} catch (IOException ex)
-									{
-										ex.printStackTrace();
-									}
-									
-								}
-	
-								else if (txt.equalsIgnoreCase(extension))
-								{
-	
-									Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./temp file/" + of.filename), Charset.forName("utf-8")));
-									{
-										writer.write(build.toString());
-										writer.close();
-										if (Desktop.isDesktopSupported())
-										{
-											Desktop.getDesktop().open(newfile);
-										}
-									}
-								}
-								
-							} catch (Exception ex)
-							{
-								ex.printStackTrace();
-							}
+							viewFile(extension, newfile, build);
 						}
 						
 						else if (f.length()==0)
 						{
-							String pdf = "pdf";
-							String txt = "txt";
-							String docx = "docx";
 							String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
-							
 							File newfile = new File("./temp file/" + of.filename);
 							build = new StringBuilder(of.sb.toString());
-							
-							try
-							{
-								if (pdf.equalsIgnoreCase(extension))
-								{
-									Document document = new Document(PageSize.A4);
-									PdfWriter.getInstance(document, new FileOutputStream("./temp file/" + of.filename));
-									document.open();
-									String breaking[] = build.toString().split("\r\n|\r|\r");
-									for (int count = 0; count < breaking.length; count++)
-									{
-										Paragraph para = new Paragraph();
-										para.add(breaking[count]);
-										document.add(para);
-									}
-									document.close();
-									if (Desktop.isDesktopSupported())
-									{
-										Desktop.getDesktop().open(newfile);
-									}
-								}
-	
-								else if (docx.equalsIgnoreCase(extension))
-								{
-									try
-									{
-										FileInputStream is = new FileInputStream(of.filePath);
-										XWPFDocument doc = new XWPFDocument(is);
-										List<XWPFParagraph> paras = doc.getParagraphs();
-										XWPFDocument newdoc = new XWPFDocument();
-	
-										String test[] = build.toString().split("\r\n|\r|\n");
-										int count = 0;
-										for (XWPFParagraph para : paras)
-										{
-											if (!para.getParagraphText().isEmpty())
-											{
-												XWPFParagraph newpara = newdoc.createParagraph();
-												List<XWPFRun> runs = para.getRuns();
-												for (int i = runs.size() - 1; i > 0; i--)
-												{
-													para.removeRun(i);
-												}
-												XWPFRun run = runs.get(0);
-												run.setText(test[count], 0);
-												newpara.addRun(run);
-												copyAllRunsToAnotherParagraph(para, newpara, test[count]);
-												count++;
-											}
-										}
-										FileOutputStream fos = new FileOutputStream(new File("./temp file/" + of.filename));
-										newdoc.write(fos);
-										fos.flush();
-										fos.close();
-										if (Desktop.isDesktopSupported())
-										{
-											Desktop.getDesktop().open(newfile);
-										}
-									} catch (FileNotFoundException ex)
-									{
-										ex.printStackTrace();
-									} catch (IOException ex)
-									{
-										ex.printStackTrace();
-									}
-									
-								}
-	
-								else if (txt.equalsIgnoreCase(extension))
-								{
-	
-									Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./temp file/" + of.filename), Charset.forName("utf-8")));
-									{
-										writer.write(build.toString());
-										writer.close();
-										if (Desktop.isDesktopSupported())
-										{
-											Desktop.getDesktop().open(newfile);
-										}
-									}
-								}
-								
-							} catch (Exception ex)
-							{
-								ex.printStackTrace();
-							}
+							viewFile(extension, newfile, build);
 						}
 					}
 				} catch (Exception ex)
@@ -651,4 +297,99 @@ public class ChooseFunction extends JFrame
 		}
 	}
 
+	public void viewFile(String extension, File newfile, StringBuilder build)
+	{
+		String pdf = "pdf";
+		String txt = "txt";
+		String docx = "docx";
+		try
+		{
+			if (pdf.equalsIgnoreCase(extension))
+			{
+				Document document = new Document(PageSize.A4);
+				PdfWriter.getInstance(document, new FileOutputStream("./temp file/" + of.filename));
+				document.open();
+				String breaking[] = build.toString().split("\r\n|\r|\r");
+				for (int count = 0; count < breaking.length; count++)
+				{
+					Paragraph para = new Paragraph();
+					para.add(breaking[count]);
+					document.add(para);
+				}
+				document.close();
+				if (Desktop.isDesktopSupported())
+				{
+					Desktop.getDesktop().open(newfile);
+				}
+			}
+
+			else if (docx.equalsIgnoreCase(extension))
+			{
+				try
+				{
+					FileInputStream is = new FileInputStream(of.filePath);
+					XWPFDocument doc = new XWPFDocument(is);
+					List<XWPFParagraph> paras = doc.getParagraphs();
+					System.out.println(paras);
+					XWPFDocument newdoc = new XWPFDocument();
+
+					String test[] = build.toString().split("\r\n|\r|\n");
+					int count = 0;
+					for (XWPFParagraph para : paras)
+					{
+						if (!para.getParagraphText().isEmpty())
+						{
+							XWPFParagraph newpara = newdoc.createParagraph();
+							List<XWPFRun> runs = para.getRuns();
+							for (int i = runs.size() - 1; i > 0; i--)
+							{
+								para.removeRun(i);
+							}
+							XWPFRun run = runs.get(0);
+							
+							run.setText(test[count], 0);
+							newpara.addRun(run);
+							copyAllRunsToAnotherParagraph(para, newpara, test[count]);
+							count++;
+						}
+					}
+					FileOutputStream fos = new FileOutputStream(new File("./temp file/" + of.filename));
+					newdoc.write(fos);
+					fos.flush();
+					fos.close();
+					if (Desktop.isDesktopSupported())
+					{
+						Desktop.getDesktop().open(newfile);
+					}
+				} catch (FileNotFoundException ex)
+				{
+					ex.printStackTrace();
+				} catch (IOException ex)
+				{
+					ex.printStackTrace();
+				}
+				
+			}
+
+			else if (txt.equalsIgnoreCase(extension))
+			{
+
+				Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./temp file/" + of.filename), Charset.forName("utf-8")));
+				{
+					writer.write(build.toString());
+					writer.close();
+					if (Desktop.isDesktopSupported())
+					{
+						Desktop.getDesktop().open(newfile);
+					}
+				}
+			}
+			
+		} catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+
+	
 }
