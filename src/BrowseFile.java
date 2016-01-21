@@ -72,11 +72,6 @@ public class BrowseFile extends JFrame
 	Highlighter.HighlightPainter pinkPainter = new MyHighlightPainter(Color.PINK);
 	Highlighter.HighlightPainter bluePainter = new MyHighlightPainter(Color.CYAN);
 	Highlighter.HighlightPainter grayPainter = new MyHighlightPainter(Color. GRAY);
-
-	/*
-	 * String fileName = of.filename; File f= new File("./indexes/" + fileName +
-	 * ".xml");
-	 */
 	/**
 	 * Launch the application.
 	 */
@@ -223,6 +218,7 @@ public class BrowseFile extends JFrame
 							stringBuilder.append("4");
 						}
 						stringBuilder.append("|");
+						stringBuilder.append(System.getProperty("line.separator"));
 						mousefirstindex=hL[i].getStartOffset();
 						mouselastindex=hL[i].getEndOffset();
 						//System.out.println(mousefirstindex);
@@ -243,6 +239,7 @@ public class BrowseFile extends JFrame
 						}
 						else
 						{
+							//checking method 
 							f.delete();
 							writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
 							writer.write(stringBuilder.toString());
@@ -666,6 +663,7 @@ public class BrowseFile extends JFrame
 						sb.append(line);
 					}
 					br.close();
+					   
 					
 					if (sb.toString().contains("|"))
 					{

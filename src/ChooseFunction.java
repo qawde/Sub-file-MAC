@@ -143,13 +143,13 @@ public class ChooseFunction extends JFrame
 						while ((line = br.readLine()) != null)
 						{
 							sb.append(line);
+							
 						}
 						br.close();
 						
 						
 						if (sb.toString().contains("|"))
 						{
-							
 							String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
 							File newfile = new File("./temp file/" + of.filename);
 							build = new StringBuilder(of.sb.toString());
@@ -159,7 +159,6 @@ public class ChooseFunction extends JFrame
 							for (int i = 0; i < high.length; i++)
 							{
 								String[] details = high[i].split(Pattern.quote(","));
-
 								int firstindex = Integer.parseInt(details[0]);
 								int lastindex = Integer.parseInt(details[1]);
 								int detail = Integer.parseInt(details[2]);
@@ -214,7 +213,6 @@ public class ChooseFunction extends JFrame
 							for (int i = 0; i < high.length; i++)
 							{
 								String[] details = high[i].split(Pattern.quote(","));
-
 								int firstindex = Integer.parseInt(details[0]);
 								int lastindex = Integer.parseInt(details[1]);
 								int detail = Integer.parseInt(details[2]);
@@ -391,5 +389,4 @@ public class ChooseFunction extends JFrame
 		}
 	}
 
-	
 }

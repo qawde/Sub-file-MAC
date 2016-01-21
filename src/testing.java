@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -15,17 +16,6 @@ import java.util.regex.Pattern;
 
 public class testing
 {
-	private static final Comparator<String> CMP = new Comparator<String>()
-			{
-			    @Override
-			    public int compare(final String a, final String b)
-			    {
-			        final int inta = Integer.parseInt(a.split("\\s+")[0]);
-			        final int intb = Integer.parseInt(b.split("\\s+")[0]);
-			        return Integer.compare(inta, intb);
-			    }
-			};
-			
 	public static void main(String[]args)
 	{
 		List<Integer> listofFi = new ArrayList<Integer>();//example
@@ -37,14 +27,15 @@ public class testing
 		int fiCheckResult = 0;
 		int liCheckResult = 0;
 		int alCheckResult = 0;
-		int mousefirstindex = 25;
-		int mouselastindex = 40;
+		int mousefirstindex = 1000;
+		int mouselastindex = 1138;
 		int accesslevel = 2;
 		int approve = 0;
 		int fiPassed=0;
 		int liPassed=0;
+		int arrayindex=0;
 		
-		File f = new File("./indexes/" + "test.txt" + ".policy");
+		File f = new File("./indexes/" + "Interimtest.txt" + ".policy");
 		f.setReadOnly();
 		
 		if (f.exists())
@@ -61,11 +52,11 @@ public class testing
 				}
 				br.close();
 				
-				
 				if (sb.toString().contains("|"))
 				{
 					String[] high = sb.toString().split(Pattern.quote("|"));
-					
+					Arrays.sort(high);
+					System.out.println(Arrays.toString(high));
 					for (int i = 0; i < high.length; i++)
 					{
 						String[] details = high[i].split(Pattern.quote(","));
@@ -78,29 +69,25 @@ public class testing
 						
 						policyaccesslevel = Integer.parseInt(details[2]);
 						listofAl.add(policyaccesslevel);
-						
 					}
-					
-					
 					
 					for(int k = 0; k < listofFi.size(); k++){//example
 						
 						if (mousefirstindex >= listofFi.get(k))
 						{
+							arrayindex=k;
 							fiPassed++;
 						}
 					}
-					
-					
-					
+
 					if(fiPassed!=0)
 					{
 						for(int h = 0; h < listofAl.size(); h++)
 						{
-							
 							if(listofAl.get(fiPassed-1)>= accesslevel )
 							{
-								approve =1;
+								System.out.println("Index: " + arrayindex);
+								approve = 1;
 							}
 							else
 							{
@@ -110,13 +97,16 @@ public class testing
 					}
 					else
 					{
-						approve=0;
+						approve = 1;
 					}
 					
 					
 				}
 				
+				System.out.println("\n");
 				System.out.println(fiPassed);
+				System.out.println(listofAl);
+				System.out.println(accesslevel);
 				System.out.println(approve);
 			} catch (Exception ex)
 			{
