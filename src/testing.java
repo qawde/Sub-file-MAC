@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 
 public class testing
-{
+{	
 	public static void main(String[]args)
 	{
 		List<Integer> listofFi = new ArrayList<Integer>();//example
@@ -24,16 +24,12 @@ public class testing
 		int policyfirstindex;
 		int policylastindex;
 		int policyaccesslevel;
-		int fiCheckResult = 0;
-		int liCheckResult = 0;
-		int alCheckResult = 0;
-		int mousefirstindex = 1000;
-		int mouselastindex = 1138;
+		int mousefirstindex = 280;
+		int mouselastindex = 300;
 		int accesslevel = 2;
 		int approve = 0;
-		int fiPassed=0;
-		int liPassed=0;
-		int arrayindex=0;
+		int fiIndex = 0;
+		int liIndex = 0;
 		
 		File f = new File("./indexes/" + "Interimtest.txt" + ".policy");
 		f.setReadOnly();
@@ -55,12 +51,10 @@ public class testing
 				if (sb.toString().contains("|"))
 				{
 					String[] high = sb.toString().split(Pattern.quote("|"));
-					Arrays.sort(high);
-					System.out.println(Arrays.toString(high));
+					/*System.out.println(Arrays.toString(high));*/
 					for (int i = 0; i < high.length; i++)
 					{
 						String[] details = high[i].split(Pattern.quote(","));
-						
 						policyfirstindex = Integer.parseInt(details[0]);//policy indexes
 						listofFi.add(policyfirstindex);
 						
@@ -69,43 +63,48 @@ public class testing
 						
 						policyaccesslevel = Integer.parseInt(details[2]);
 						listofAl.add(policyaccesslevel);
-					}
-					
-					for(int k = 0; k < listofFi.size(); k++){//example
 						
-						if (mousefirstindex >= listofFi.get(k))
-						{
-							arrayindex=k;
-							fiPassed++;
-						}
+					}
+					/*System.out.println("\n");*/
+					System.out.println(listofFi);
+					System.out.println(listofLi);
+					System.out.println(listofAl);
+					
+					for(int k = 0; k < listofFi.size(); k++)
+					{
+						fiIndex=findFiNearestNumber(listofFi,mousefirstindex);
 					}
 
-					if(fiPassed!=0)
+					for(int k = 0; k < listofLi.size(); k++)
 					{
-						for(int h = 0; h < listofAl.size(); h++)
+						liIndex=findLiNearestNumber(listofLi,mouselastindex);
+					}
+					
+					for(int h = 0; h < listofAl.size(); h++)
+					{
+						if(listofAl.get(fiIndex)>= accesslevel)
 						{
-							if(listofAl.get(fiPassed-1)>= accesslevel )
+							if(listofAl.get(liIndex)>= accesslevel)
 							{
-								System.out.println("Index: " + arrayindex);
 								approve = 1;
 							}
 							else
 							{
-								approve=0;
+								approve = 0;
 							}
 						}
+						else
+						{
+							approve=0;
+						}
 					}
-					else
-					{
-						approve = 1;
-					}
-					
-					
 				}
 				
 				System.out.println("\n");
-				System.out.println(fiPassed);
+				/*System.out.println(fiPassed);*/
 				System.out.println(listofAl);
+				System.out.println(listofFi.get(fiIndex));
+				System.out.println(listofLi.get(liIndex));
 				System.out.println(accesslevel);
 				System.out.println(approve);
 			} catch (Exception ex)
@@ -115,5 +114,100 @@ public class testing
 			
 		}
 	}
+	
+	public static int findFiNearestNumber(List<Integer> indexes, int mouseIndex)
+	{
+	    int min=0,max=0,nearestNumber,index;
 
+	    for(int i=0; i<indexes.size(); i++)
+	    {
+	        if(indexes.get(i)<mouseIndex)
+	        {
+	            if(min==0)
+	            {
+	                min=indexes.get(i);
+	            }
+	            else if(indexes.get(i)>min)
+	            {
+	                min=indexes.get(i);
+	            }
+	        }
+	        else if(indexes.get(i)>mouseIndex)
+	        {
+	            if(max==0)
+	            {
+	                max=indexes.get(i);
+	            }
+	            else if(indexes.get(i)<max)
+	            {
+	                max=indexes.get(i);
+	            }
+	        }
+	        else
+	        {
+	            return indexes.get(i);
+	        }
+	    }
+
+	    if(Math.abs(mouseIndex-min)<Math.abs(mouseIndex-max))
+	    {
+	        nearestNumber=min;
+	        index = indexes.indexOf(nearestNumber);
+	    }
+	    else
+	    {
+	        nearestNumber=max;
+	        index = indexes.indexOf(nearestNumber);
+	    }
+
+	    return index;
+	}
+	
+	public static int findLiNearestNumber(List<Integer> indexes, int mouseIndex)
+	{
+	    int min=0,max=0,nearestNumber,index;
+
+	    for(int i=0; i<indexes.size(); i++)
+	    {
+	        if(indexes.get(i)<mouseIndex)
+	        {
+	            if(min==0)
+	            {
+	                min=indexes.get(i);
+	            }
+	            else if(indexes.get(i)>min)
+	            {
+	                min=indexes.get(i);
+	            }
+	        }
+	        else if(indexes.get(i)>mouseIndex)
+	        {
+	            if(max==0)
+	            {
+	                max=indexes.get(i);
+	            }
+	            else if(indexes.get(i)<max)
+	            {
+	                max=indexes.get(i);
+	            }
+	        }
+	        else
+	        {
+	            return indexes.get(i);
+	        }
+	    }
+
+	    if(Math.abs(mouseIndex-min)<Math.abs(mouseIndex-max))
+	    {
+	        nearestNumber=min;
+	        index = indexes.indexOf(nearestNumber);
+	    }
+	    else
+	    {
+	        nearestNumber=max;
+	        index = indexes.indexOf(nearestNumber);
+	    }
+
+	    return index;
+	}
 }
