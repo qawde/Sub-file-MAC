@@ -64,6 +64,7 @@ public class BrowseFile extends JFrame
 	Highlighter hl;
 	JTextArea tfFile = new JTextArea();
 	int remove = 0;
+	int accesslevel=0;
 	String path;
 	
 
@@ -205,6 +206,7 @@ public class BrowseFile extends JFrame
 						if (hL[i].getPainter() == redPainter)
 						{
 							stringBuilder.append("1");
+							
 						} else if (hL[i].getPainter() == yellowPainter)
 						{
 							stringBuilder.append("2");
@@ -239,13 +241,26 @@ public class BrowseFile extends JFrame
 						}
 						else
 						{
-							//checking method 
-							f.delete();
-							writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
-							writer.write(stringBuilder.toString());
-							stringBuilder.setLength(0);
-							remove = 0;
-							choose();
+							int approve= checkAbleHilite(mousefirstindex,mouselastindex,accesslevel);
+							System.out.println(accesslevel);
+							System.out.println(approve);
+							//checking method
+							if(approve==1)
+							{
+								f.delete();
+								writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
+								writer.write(stringBuilder.toString());
+								stringBuilder.setLength(0);
+								remove = 0;
+								choose();
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(contentPane, "cannot overwrite");
+								stringBuilder.setLength(0);
+								removeHighlights(tfFile);
+								choose();
+							}
 						}
 					} catch (Exception ex)
 					{
@@ -302,6 +317,7 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				accesslevel=1;
 				hilit = tfFile.getHighlighter();
 				if (hilit.getHighlights() != null)
 				{
@@ -327,6 +343,7 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				accesslevel=2;
 				hilit = tfFile.getHighlighter();
 				if (hilit.getHighlights() != null)
 				{
@@ -353,7 +370,7 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				
+				accesslevel=3;
 				hilit = tfFile.getHighlighter();
 				if (hilit.getHighlights() != null)
 				{
@@ -379,6 +396,7 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				accesslevel=4;
 				hilit = tfFile.getHighlighter();
 				if (hilit.getHighlights() != null)
 				{
@@ -634,86 +652,174 @@ public class BrowseFile extends JFrame
 	
 	public int checkAbleHilite(int mousefirstindex, int mouselastindex, int accesslevel)
 	{
-			List<Integer> listofFi = new ArrayList<Integer>();//example
-			List<Integer> listofLi = new ArrayList<Integer>();//example
-			List<Integer> listofAl = new ArrayList<Integer>();//example
-			int policyfirstindex;
-			int policylastindex;
-			int policyaccesslevel;
-			int fiCheckResult = 0;
-			int liCheckResult = 0;
-			int alCheckResult = 0;
-			int approve = 0;
-			int fiPassed=0;
-			int liPassed=0;
-			File f = new File("./indexes/" + "test.txt" + ".policy");
+		List<Integer> listofFi = new ArrayList<Integer>();//example
+		List<Integer> listofLi = new ArrayList<Integer>();//example
+		List<Integer> listofAl = new ArrayList<Integer>();//example
+		int policyfirstindex;
+		int policylastindex;
+		int policyaccesslevel;
+		int approve = 0;
+		int indexOne = 0;
+		int indexTwo = 0;
 			
+		File f = new File("./indexes/" + of.filename + ".policy");
+		f.setReadOnly();
 			
-			f.setReadOnly();
-			
-			if (f.exists())
+		if (f.exists())
+		{
+			try
 			{
-				try
+				BufferedReader br = new BufferedReader(new FileReader(f));
+				String line;
+				StringBuilder sb = new StringBuilder();
+				
+				while ((line = br.readLine()) != null)
 				{
-					BufferedReader br = new BufferedReader(new FileReader(f));
-					String line;
-					StringBuilder sb = new StringBuilder();
-					while ((line = br.readLine()) != null)
-					{
-						sb.append(line);
-					}
-					br.close();
-					   
+					sb.append(line);
+				}
+				br.close();
 					
-					if (sb.toString().contains("|"))
-					{
-						String[] high = sb.toString().split(Pattern.quote("|"));
-						for (int i = 0; i < high.length; i++)
-						{
-							String[] details = high[i].split(Pattern.quote(","));
-							
-							policyfirstindex = Integer.parseInt(details[0]);//policy indexes
-							listofFi.add(policyfirstindex);
-							
-							policylastindex = Integer.parseInt(details[1]);
-							listofLi.add(policylastindex);
-							
-							policyaccesslevel = Integer.parseInt(details[2]);
-							listofAl.add(policyaccesslevel);
-						}
-						
-						for(int k = 0; k < listofFi.size(); k++){//example
-							
-							if (mousefirstindex >= listofFi.get(k))
-							{
-								fiPassed++;
-							}
-						}
-						
-						
-						
-						if(fiCheckResult==1 && liCheckResult==1)
-						{
-							for(int h = 0; h < listofAl.size(); h++)
-							{
-								if(listofAl.get(fiPassed)<=accesslevel)
-								{
-									approve =1;
-								}
-								else
-								{
-									approve=0;
-								}
-							}
-						}
-						
-					}
-				} catch (Exception ex)
+				if (sb.toString().contains("|"))
 				{
-					ex.printStackTrace();
-				}	
-		
+					String[] high = sb.toString().split(Pattern.quote("|"));
+					for (int i = 0; i < high.length; i++)
+					{
+						String[] details = high[i].split(Pattern.quote(","));
+						policyfirstindex = Integer.parseInt(details[0]);//policy indexes
+						listofFi.add(policyfirstindex);
+							
+						policylastindex = Integer.parseInt(details[1]);
+						listofLi.add(policylastindex);
+							
+						policyaccesslevel = Integer.parseInt(details[2]);
+						listofAl.add(policyaccesslevel);
+							
+					}
+					
+					for(int k = 0; k < listofFi.size(); k++)
+					{
+						indexOne = findNearestNumber(listofFi,mousefirstindex);
+					}
+
+					for(int k = 0; k < listofLi.size(); k++)
+					{
+						indexTwo = findNearestNumber(listofLi,mouselastindex);
+					}
+						
+						
+					if(listofFi.get(indexOne)< mousefirstindex && listofLi.get(indexOne)< mousefirstindex)
+					{
+						if(listofFi.get(indexTwo)> mouselastindex)
+						{
+							approve=1;
+						}
+						else
+						{
+							if(listofAl.get(indexTwo)>= accesslevel)
+							{
+								approve=1;
+							}
+							else
+							{
+								approve=0;
+							}
+						}
+						
+					}	
+					else if(mousefirstindex < listofFi.get(indexOne) && mousefirstindex < listofLi.get(indexOne))
+					{
+						if(mouselastindex < listofFi.get(indexOne))
+						{
+							approve =1;
+						}
+						else if(mouselastindex > listofFi.get(indexOne)&& mouselastindex < listofLi.get(indexOne))
+						{
+							if(listofAl.get(indexOne)>= accesslevel)
+							{
+								approve=1;
+							}
+							else
+							{
+								approve=0;
+							}
+						}
+						else
+						{
+							if(listofAl.get(indexTwo)>= accesslevel)
+							{
+								approve=1;
+							}
+							else
+							{
+								approve=0;
+							}
+						}
+					}
+					else
+					{
+						if(listofAl.get(indexOne)>= accesslevel && listofAl.get(indexTwo)>= accesslevel)
+						{
+							approve=1;
+						}
+						else
+						{
+							approve=0;
+						}
+					}
+				}
+			} catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}	
 		}
 		return approve;
+	}
+	
+	public static int findNearestNumber(List<Integer> indexes, int mouseIndex)
+	{
+	    int min=0,max=0,nearestNumber,index;
+
+	    for(int i=0; i<indexes.size(); i++)
+	    {
+	        if(indexes.get(i)<mouseIndex)
+	        {
+	            if(min==0)
+	            {
+	                min=indexes.get(i);
+	            }
+	            else if(indexes.get(i)>min)
+	            {
+	                min=indexes.get(i);
+	            }
+	        }
+	        else if(indexes.get(i)>mouseIndex)
+	        {
+	            if(max==0)
+	            {
+	                max=indexes.get(i);
+	            }
+	            else if(indexes.get(i)<max)
+	            {
+	                max=indexes.get(i);
+	            }
+	        }
+	        else
+	        {
+	            return indexes.get(i);
+	        }
+	    }
+
+	    if(Math.abs(mouseIndex-min)<Math.abs(mouseIndex-max))
+	    {
+	        nearestNumber=min;
+	        index = indexes.indexOf(nearestNumber);
+	    }
+	    else
+	    {
+	        nearestNumber=max;
+	        index = indexes.indexOf(nearestNumber);
+	    }
+
+	    return index;
 	}
 }
