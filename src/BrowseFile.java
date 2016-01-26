@@ -175,7 +175,6 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-
 				File f = new File("./indexes/" + of.filename + ".policy");
 				
 				if (remove != 0)
@@ -218,7 +217,6 @@ public class BrowseFile extends JFrame
 							stringBuilder.append("4");
 						}
 						stringBuilder.append("|");
-						stringBuilder.append(System.getProperty("line.separator"));
 						mousefirstindex=hL[i].getStartOffset();
 						mouselastindex=hL[i].getEndOffset();
 					}
@@ -238,9 +236,7 @@ public class BrowseFile extends JFrame
 						else
 						{
 							int approve= checkAbleHilite(mousefirstindex,mouselastindex,accesslevel);
-							System.out.println(accesslevel);
-							System.out.println(approve);
-							//checking method
+
 							if(approve==1)
 							{
 								f.delete();
@@ -252,7 +248,7 @@ public class BrowseFile extends JFrame
 							}
 							else
 							{
-								JOptionPane.showMessageDialog(contentPane, "cannot overwrite");
+								JOptionPane.showMessageDialog(contentPane, "Lower access level cannot overwrite higher access level.");
 								stringBuilder.setLength(0);
 								removeHighlights(tfFile);
 								choose();
@@ -326,7 +322,7 @@ public class BrowseFile extends JFrame
 						}
 					}
 					redHighlight(tfFile);
-				}
+				}				
 			}
 		});
 		btnCategoryA.setBounds(811, 177, 162, 23);
@@ -511,7 +507,6 @@ public class BrowseFile extends JFrame
 	
 	public void redHighlight(JTextComponent textComp)
 	{
-
 		try
 		{
 			hilit = textComp.getHighlighter();
@@ -532,7 +527,6 @@ public class BrowseFile extends JFrame
 
 	public void pinkHighlight(JTextComponent textComp)
 	{
-
 		try
 		{
 			hilit = textComp.getHighlighter();
@@ -552,7 +546,6 @@ public class BrowseFile extends JFrame
 
 	public void yellowHighlight(JTextComponent textComp)
 	{
-
 		try
 		{
 			hilit = textComp.getHighlighter();
@@ -573,7 +566,6 @@ public class BrowseFile extends JFrame
 
 	public void blueHighlight(JTextComponent textComp)
 	{
-
 		try
 		{
 			hilit = textComp.getHighlighter();
@@ -594,7 +586,6 @@ public class BrowseFile extends JFrame
 
 	public void removeHighlights(JTextComponent textComp)
 	{
-
 		Highlighter hilite = textComp.getHighlighter();
 		Highlighter.Highlight[] hilites = hilite.getHighlights();
 
@@ -668,9 +659,7 @@ public class BrowseFile extends JFrame
 					
 					for(int k = 0; k < listofFi.size(); k++)
 					{
-						indexOne = findNearestNumber(listofFi,mousefirstindex);
-						System.out.println(indexOne);
-						System.out.println("\n");
+						indexOne = findNearestNumber(listofFi,mousefirstindex); 
 					}
 
 					for(int k = 0; k < listofLi.size(); k++)
