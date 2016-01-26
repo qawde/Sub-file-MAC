@@ -49,7 +49,6 @@ import java.awt.Font;
 
 public class BrowseFile extends JFrame
 {
-
 	private JPanel contentPane;
 	int firstIndex;
 	int lastIndex;
@@ -67,7 +66,6 @@ public class BrowseFile extends JFrame
 	int accesslevel=0;
 	String path;
 	
-
 	Highlighter.HighlightPainter redPainter = new MyHighlightPainter(Color.RED);
 	Highlighter.HighlightPainter yellowPainter = new MyHighlightPainter(Color.YELLOW);
 	Highlighter.HighlightPainter pinkPainter = new MyHighlightPainter(Color.PINK);
@@ -223,8 +221,6 @@ public class BrowseFile extends JFrame
 						stringBuilder.append(System.getProperty("line.separator"));
 						mousefirstindex=hL[i].getStartOffset();
 						mouselastindex=hL[i].getEndOffset();
-						//System.out.println(mousefirstindex);
-						//System.out.println(mouselastindex);
 					}
 					
 					BufferedWriter writer = null;	
@@ -348,7 +344,6 @@ public class BrowseFile extends JFrame
 				if (hilit.getHighlights() != null)
 				{
 					Highlighter.Highlight[] hL = hilit.getHighlights();
-					// redHighlight(File);
 					for (int i = 0; i < hL.length; i++)
 					{
 						if ((hL[i].getStartOffset() == firstIndex) && (hL[i].getEndOffset() == lastIndex))
@@ -456,13 +451,6 @@ public class BrowseFile extends JFrame
 		{
 			try
 			{
-
-				/*
-				 * FileInputStream inputStream = new FileInputStream(f);
-				 * InputStreamReader reader = new InputStreamReader(inputStream,
-				 * Charset.forName("utf-8")); BufferedReader br = new
-				 * BufferedReader(reader);
-				 */
 				BufferedReader br = new BufferedReader(new FileReader(f));
 				String line;
 				StringBuilder sb = new StringBuilder();
@@ -471,7 +459,6 @@ public class BrowseFile extends JFrame
 					sb.append(line);
 				}
 				br.close();
-				// String plainText=Encrypt.decrypt(sb.toString());
 				if (sb.toString().contains("|"))
 				{
 					String[] high = sb.toString().split(Pattern.quote("|"));
@@ -530,11 +517,7 @@ public class BrowseFile extends JFrame
 			hilit = textComp.getHighlighter();
 			Document doc = textComp.getDocument();
 			String text = doc.getText(0, doc.getLength());
-
-			/*
-			 * hilite.addHighlight(allText.indexOf(str), allText.indexOf(str) +
-			 * str.length(), myHighlightPainter);
-			 */
+			
 			if (firstIndex < lastIndex)
 			{
 				hilit.addHighlight(firstIndex, lastIndex, redPainter);
@@ -555,11 +538,6 @@ public class BrowseFile extends JFrame
 			hilit = textComp.getHighlighter();
 			Document doc = textComp.getDocument();
 			String text = doc.getText(0, doc.getLength());
-
-			/*
-			 * hilite.addHighlight(allText.indexOf(str), allText.indexOf(str) +
-			 * str.length(), myHighlightPainter);
-			 */
 			if (firstIndex < lastIndex)
 			{
 				hilit.addHighlight(firstIndex, lastIndex, pinkPainter);
@@ -581,10 +559,6 @@ public class BrowseFile extends JFrame
 			Document doc = textComp.getDocument();
 			String text = doc.getText(0, doc.getLength());
 
-			/*
-			 * hilite.addHighlight(allText.indexOf(str), allText.indexOf(str) +
-			 * str.length(), myHighlightPainter);
-			 */
 			if (firstIndex < lastIndex)
 			{
 				hilit.addHighlight(firstIndex, lastIndex, yellowPainter);
@@ -606,10 +580,6 @@ public class BrowseFile extends JFrame
 			Document doc = textComp.getDocument();
 			String text = doc.getText(0, doc.getLength());
 
-			/*
-			 * hilite.addHighlight(allText.indexOf(str), allText.indexOf(str) +
-			 * str.length(), myHighlightPainter);
-			 */
 			if (firstIndex < lastIndex)
 			{
 				hilit.addHighlight(firstIndex, lastIndex, bluePainter);
