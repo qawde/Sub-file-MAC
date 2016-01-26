@@ -699,6 +699,8 @@ public class BrowseFile extends JFrame
 					for(int k = 0; k < listofFi.size(); k++)
 					{
 						indexOne = findNearestNumber(listofFi,mousefirstindex);
+						System.out.println(indexOne);
+						System.out.println("\n");
 					}
 
 					for(int k = 0; k < listofLi.size(); k++)
@@ -706,27 +708,7 @@ public class BrowseFile extends JFrame
 						indexTwo = findNearestNumber(listofLi,mouselastindex);
 					}
 						
-						
-					if(listofFi.get(indexOne)< mousefirstindex && listofLi.get(indexOne)< mousefirstindex)
-					{
-						if(listofFi.get(indexTwo)> mouselastindex)
-						{
-							approve=1;
-						}
-						else
-						{
-							if(listofAl.get(indexTwo)>= accesslevel)
-							{
-								approve=1;
-							}
-							else
-							{
-								approve=0;
-							}
-						}
-						
-					}	
-					else if(mousefirstindex < listofFi.get(indexOne) && mousefirstindex < listofLi.get(indexOne))
+					if(mousefirstindex < listofFi.get(indexOne) && mousefirstindex < listofLi.get(indexOne))
 					{
 						if(mouselastindex < listofFi.get(indexOne))
 						{
@@ -754,7 +736,36 @@ public class BrowseFile extends JFrame
 								approve=0;
 							}
 						}
-					}
+					}	
+					else if(listofFi.get(indexOne)< mousefirstindex && listofLi.get(indexOne)< mousefirstindex)
+					{
+						
+						if(listofFi.get(indexOne)== listofFi.get(indexTwo) && listofLi.get(indexOne)== listofLi.get(indexTwo))
+						{
+							if(listofLi.get(indexOne)<mousefirstindex && listofLi.get(indexOne)<mouselastindex)
+							{
+								approve=1;
+							}
+						}
+						
+						else if(listofFi.get(indexTwo)> mouselastindex)
+						{
+							approve=1;
+						}
+						
+						else
+						{
+							if(listofAl.get(indexTwo)>= accesslevel)
+							{
+								approve=1;
+							}
+							else
+							{
+								approve=0;
+							}
+						}
+						
+					}	
 					else
 					{
 						if(listofAl.get(indexOne)>= accesslevel && listofAl.get(indexTwo)>= accesslevel)
@@ -820,6 +831,10 @@ public class BrowseFile extends JFrame
 	        index = indexes.indexOf(nearestNumber);
 	    }
 
+	    if(index<0)
+	    {
+	    	index = 0;
+	    }
 	    return index;
 	}
 }
