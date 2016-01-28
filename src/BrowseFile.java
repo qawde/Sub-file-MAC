@@ -37,7 +37,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -458,6 +460,7 @@ public class BrowseFile extends JFrame
 				if (sb.toString().contains("|"))
 				{
 					String[] high = sb.toString().split(Pattern.quote("|"));
+					Arrays.sort(high, new lastchar());
 					hilit = tfFile.getHighlighter();
 					for (int i = 0; i < high.length; i++)
 					{
@@ -666,14 +669,16 @@ public class BrowseFile extends JFrame
 					{
 						indexTwo = findNearestNumber(listofLi,mouselastindex);
 					}
-						
-					if(mousefirstindex < listofFi.get(indexOne) && mousefirstindex < listofLi.get(indexOne))
+					System.out.println(mousefirstindex);
+					System.out.println(indexOne);
+					System.out.println(indexTwo);
+					if(listofFi.get(indexOne)>= mousefirstindex  && listofLi.get(indexOne) > mousefirstindex)
 					{
-						if(mouselastindex < listofFi.get(indexOne))
+						if(listofFi.get(indexOne)> mouselastindex)
 						{
 							approve =1;
 						}
-						else if(mouselastindex > listofFi.get(indexOne)&& mouselastindex < listofLi.get(indexOne))
+						else if(mouselastindex >= listofFi.get(indexOne)&& listofLi.get(indexOne) >= mouselastindex)
 						{
 							if(listofAl.get(indexOne)>= accesslevel)
 							{
@@ -696,7 +701,7 @@ public class BrowseFile extends JFrame
 							}
 						}
 					}	
-					else if(listofFi.get(indexOne)< mousefirstindex && listofLi.get(indexOne)< mousefirstindex)
+					else if(listofFi.get(indexOne)< mousefirstindex && mousefirstindex >= listofLi.get(indexOne))
 					{
 						
 						if(listofFi.get(indexOne)== listofFi.get(indexTwo) && listofLi.get(indexOne)== listofLi.get(indexTwo))
@@ -775,7 +780,7 @@ public class BrowseFile extends JFrame
 	        }
 	        else
 	        {
-	            return indexes.get(i);
+	            return i;
 	        }
 	    }
 
@@ -796,4 +801,10 @@ public class BrowseFile extends JFrame
 	    }
 	    return index;
 	}
+	
+	private static class lastchar implements Comparator<String>{
+        public int compare(String s1, String s2) {
+            return (s1.charAt(s1.length()-1) - s2.charAt(s2.length()-1));
+        }
+    }
 }
