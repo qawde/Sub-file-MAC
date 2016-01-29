@@ -234,7 +234,7 @@ public class BrowseFile extends JFrame
 					Highlighter.Highlight[] hL = hilit.getHighlights();
 					for (int i = 0; i < hL.length; i++)
 					{
-						if ((hL[i].getStartOffset() == firstIndex) && (hL[i].getEndOffset() == lastIndex))
+						if ((hL[i].getStartOffset() >= firstIndex) && (lastIndex >= hL[i].getEndOffset()))
 						{
 							hilit.removeHighlight(hL[i]);
 						}
@@ -244,7 +244,7 @@ public class BrowseFile extends JFrame
 				saveHighlight(0);
 			}
 		});
-		btnCategoryA.setBounds(811, 177, 162, 23);
+		btnCategoryA.setBounds(810, 120, 162, 23);
 		contentPane.add(btnCategoryA);
 
 		JButton btnCategoryB = new JButton("Security Level 2");
@@ -261,7 +261,7 @@ public class BrowseFile extends JFrame
 					Highlighter.Highlight[] hL = hilit.getHighlights();
 					for (int i = 0; i < hL.length; i++)
 					{
-						if ((hL[i].getStartOffset() == firstIndex) && (hL[i].getEndOffset() == lastIndex))
+						if ((hL[i].getStartOffset() >= firstIndex) && (lastIndex >= hL[i].getEndOffset()))
 						{
 							hilit.removeHighlight(hL[i]);
 						}
@@ -271,7 +271,7 @@ public class BrowseFile extends JFrame
 				saveHighlight(0);
 			}
 		});
-		btnCategoryB.setBounds(811, 236, 162, 23);
+		btnCategoryB.setBounds(810, 180, 162, 23);
 		contentPane.add(btnCategoryB);
 
 		JButton btnCategoryC = new JButton("Security Level 3");
@@ -288,7 +288,7 @@ public class BrowseFile extends JFrame
 					Highlighter.Highlight[] hL = hilit.getHighlights();
 					for (int i = 0; i < hL.length; i++)
 					{
-						if ((hL[i].getStartOffset() == firstIndex) && (hL[i].getEndOffset() == lastIndex))
+						if ((hL[i].getStartOffset() >= firstIndex) && (lastIndex >= hL[i].getEndOffset()))
 						{
 							hilit.removeHighlight(hL[i]);
 						}
@@ -298,7 +298,7 @@ public class BrowseFile extends JFrame
 				saveHighlight(0);
 			}
 		});
-		btnCategoryC.setBounds(811, 296, 162, 23);
+		btnCategoryC.setBounds(810, 240, 162, 23);
 		contentPane.add(btnCategoryC);
 
 		JButton btnCategoryD = new JButton("Security Level 4");
@@ -315,7 +315,7 @@ public class BrowseFile extends JFrame
 					Highlighter.Highlight[] hL = hilit.getHighlights();
 					for (int i = 0; i < hL.length; i++)
 					{
-						if ((hL[i].getStartOffset() == firstIndex) && (hL[i].getEndOffset() == lastIndex))
+						if ((hL[i].getStartOffset() >= firstIndex) && (lastIndex >= hL[i].getEndOffset()))
 						{
 							hilit.removeHighlight(hL[i]);
 						}
@@ -325,7 +325,7 @@ public class BrowseFile extends JFrame
 				saveHighlight(0);
 			}
 		});
-		btnCategoryD.setBounds(811, 361, 162, 23);
+		btnCategoryD.setBounds(810, 300, 162, 23);
 		contentPane.add(btnCategoryD);
 
 		JLabel lblSecurityPolicyGenerator = new JLabel("Security Policy Generator");
@@ -344,7 +344,7 @@ public class BrowseFile extends JFrame
 				dispose();
 			}
 		});
-		btnBack.setBounds(811, 518, 162, 23);
+		btnBack.setBounds(810, 520, 162, 23);
 		contentPane.add(btnBack);
 
 		JButton btnRemove = new JButton("Remove All Highlights");
@@ -353,9 +353,9 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				String message = "Are you sure you want to remove ALL highlights?";
+				String message = "Are you sure you want to remove ALL the policies?";
 				int dialogButton = JOptionPane.YES_NO_OPTION;
-				int dialogResult = JOptionPane.showConfirmDialog(null, message, "Warning", dialogButton);
+				int dialogResult = JOptionPane.showConfirmDialog(contentPane, message, "Warning", dialogButton);
 				
 				if(dialogResult == 0) 
 				{
@@ -364,7 +364,7 @@ public class BrowseFile extends JFrame
 				} 
 			}
 		});
-		btnRemove.setBounds(811, 414, 162, 23);
+		btnRemove.setBounds(810, 460, 162, 23);
 		contentPane.add(btnRemove);
 	}
  
@@ -817,7 +817,6 @@ public class BrowseFile extends JFrame
 					if (writer != null)
 					{
 						writer.close();
-						/*JOptionPane.showMessageDialog(contentPane, "Save Successful");*/
 						stringBuilder.setLength(0);
 						removeHighlights(tfFile);
 						choose();

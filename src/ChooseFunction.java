@@ -328,7 +328,6 @@ public class ChooseFunction extends JFrame
 					FileInputStream is = new FileInputStream(of.filePath);
 					XWPFDocument doc = new XWPFDocument(is);
 					List<XWPFParagraph> paras = doc.getParagraphs();
-					System.out.println(paras);
 					XWPFDocument newdoc = new XWPFDocument();
 
 					String test[] = build.toString().split("\r\n|\r|\n");
