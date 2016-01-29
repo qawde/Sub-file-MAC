@@ -171,7 +171,7 @@ public class BrowseFile extends JFrame
 		btnBrowse.setBounds(40, 70, 150, 23);
 		contentPane.add(btnBrowse);
 
-		JButton btnSave = new JButton("Generate MAC Policy");
+		/*JButton btnSave = new JButton("Generate MAC Policy");
 		btnSave.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
 		btnSave.addActionListener(new ActionListener()
 		{
@@ -193,96 +193,12 @@ public class BrowseFile extends JFrame
 					remove = 0;
 				} 
 				
-				else
-				{
-					Highlighter.Highlight[] hL = hilit.getHighlights();
-					for (int i = 0; i < hL.length; i++)
-					{
-						stringBuilder.append(hL[i].getStartOffset());
-						stringBuilder.append(",");
-						stringBuilder.append(hL[i].getEndOffset());
-						stringBuilder.append(",");
-						if (hL[i].getPainter() == redPainter)
-						{
-							stringBuilder.append("1");
-							
-						} else if (hL[i].getPainter() == yellowPainter)
-						{
-							stringBuilder.append("2");
-						} else if (hL[i].getPainter() == pinkPainter)
-						{
-							stringBuilder.append("3");
-						}
-
-						else if (hL[i].getPainter() == bluePainter)
-						{
-							stringBuilder.append("4");
-						}
-						stringBuilder.append("|");
-						mousefirstindex=hL[i].getStartOffset();
-						mouselastindex=hL[i].getEndOffset();
-					}
-					
-					BufferedWriter writer = null;	
-					try{	
-						
-						if (f.length()==0) 
-						{
-							f.delete();
-							writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
-							writer.write(stringBuilder.toString());
-							stringBuilder.setLength(0);
-							remove = 0;
-							choose();
-						}
-						else
-						{
-							int approve= checkAbleHilite(mousefirstindex,mouselastindex,accesslevel);
-
-							if(approve==1)
-							{
-								f.delete();
-								writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
-								writer.write(stringBuilder.toString());
-								stringBuilder.setLength(0);
-								remove = 0;
-								choose();
-							}
-							else
-							{
-								JOptionPane.showMessageDialog(contentPane, "Lower access level cannot overwrite higher access level.");
-								stringBuilder.setLength(0);
-								removeHighlights(tfFile);
-								choose();
-							}
-						}
-					} catch (Exception ex)
-					{
-						ex.printStackTrace();
-					} finally
-					{
-						try
-						{
-							if (writer != null)
-							{
-								writer.close();
-								JOptionPane.showMessageDialog(contentPane, "Save Successful");
-								stringBuilder.setLength(0);
-								removeHighlights(tfFile);
-								remove = 0;
-								choose();
-							}
-						} catch (IOException ex)
-						{
-							ex.printStackTrace();
-						}
-					}
-				}
+				
 
 			}
 		});
 		btnSave.setBounds(811, 467, 162, 23);
-		contentPane.add(btnSave);
+		contentPane.add(btnSave);*/
 
 		JScrollPane scrollPane = new JScrollPane(tfFile);
 
@@ -291,7 +207,7 @@ public class BrowseFile extends JFrame
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		contentPane.add(scrollPane);
 
-		JButton btnRefresh = new JButton("Refresh");
+		/*JButton btnRefresh = new JButton("Refresh");
 		btnRefresh.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
 		btnRefresh.addActionListener(new ActionListener()
 		{
@@ -302,7 +218,7 @@ public class BrowseFile extends JFrame
 			}
 		});
 		btnRefresh.setBounds(811, 118, 162, 23);
-		contentPane.add(btnRefresh);
+		contentPane.add(btnRefresh);*/
 		
 		JButton btnCategoryA = new JButton("Security Level 1");
 		btnCategoryA.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
@@ -324,7 +240,8 @@ public class BrowseFile extends JFrame
 						}
 					}
 					redHighlight(tfFile);
-				}				
+				}
+				saveHighlight(0);
 			}
 		});
 		btnCategoryA.setBounds(811, 177, 162, 23);
@@ -351,6 +268,7 @@ public class BrowseFile extends JFrame
 					}
 					yellowHighlight(tfFile);
 				}
+				saveHighlight(0);
 			}
 		});
 		btnCategoryB.setBounds(811, 236, 162, 23);
@@ -377,6 +295,7 @@ public class BrowseFile extends JFrame
 					}
 					pinkHighlight(tfFile);
 				}
+				saveHighlight(0);
 			}
 		});
 		btnCategoryC.setBounds(811, 296, 162, 23);
@@ -403,6 +322,7 @@ public class BrowseFile extends JFrame
 					}
 					blueHighlight(tfFile);
 				}
+				saveHighlight(0);
 			}
 		});
 		btnCategoryD.setBounds(811, 361, 162, 23);
@@ -433,8 +353,15 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				removeHighlights(tfFile);
-				remove = 1;	
+				String message = "Are you sure you want to remove ALL highlights?";
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog(null, message, "Warning", dialogButton);
+				
+				if(dialogResult == 0) 
+				{
+				  removeHighlights(tfFile);
+				  saveHighlight(1);
+				} 
 			}
 		});
 		btnRemove.setBounds(811, 414, 162, 23);
@@ -669,9 +596,6 @@ public class BrowseFile extends JFrame
 					{
 						indexTwo = findNearestNumber(listofLi,mouselastindex);
 					}
-					System.out.println(mousefirstindex);
-					System.out.println(indexOne);
-					System.out.println(indexTwo);
 					if(listofFi.get(indexOne)>= mousefirstindex  && listofLi.get(indexOne) > mousefirstindex)
 					{
 						if(listofFi.get(indexOne)> mouselastindex)
@@ -807,4 +731,102 @@ public class BrowseFile extends JFrame
             return (s1.charAt(s1.length()-1) - s2.charAt(s2.length()-1));
         }
     }
+
+	public void saveHighlight(int remove)
+	{
+		File f = new File("./indexes/" + of.filename + ".policy");
+		Highlighter.Highlight[] hL = hilit.getHighlights();
+		if (remove == 1)
+		{
+			f.delete();
+			try
+			{
+				f.createNewFile();
+			} catch (IOException e1)
+			{
+				e1.printStackTrace();
+			}
+		} 
+		else
+		{
+			for (int i = 0; i < hL.length; i++)
+			{
+				stringBuilder.append(hL[i].getStartOffset());
+				stringBuilder.append(",");
+				stringBuilder.append(hL[i].getEndOffset());
+				stringBuilder.append(",");
+				if (hL[i].getPainter() == redPainter)
+				{
+					stringBuilder.append("1");
+					
+				} else if (hL[i].getPainter() == yellowPainter)
+				{
+					stringBuilder.append("2");
+				} else if (hL[i].getPainter() == pinkPainter)
+				{
+					stringBuilder.append("3");
+				}
+	
+				else if (hL[i].getPainter() == bluePainter)
+				{
+					stringBuilder.append("4");
+				}
+				stringBuilder.append("|");
+				mousefirstindex=hL[i].getStartOffset();
+				mouselastindex=hL[i].getEndOffset();
+			}
+			
+			BufferedWriter writer = null;	
+			try{	
+				
+				if (f.length()==0) 
+				{
+					f.delete();
+					writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
+					writer.write(stringBuilder.toString());
+					stringBuilder.setLength(0);
+					choose();
+				}
+				else
+				{
+					int approve= checkAbleHilite(mousefirstindex,mouselastindex,accesslevel);
+	
+					if(approve==1)
+					{
+						f.delete();
+						writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
+						writer.write(stringBuilder.toString());
+						stringBuilder.setLength(0);
+						choose();
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(contentPane, "Lower access level cannot overwrite higher access level.");
+						stringBuilder.setLength(0);
+						removeHighlights(tfFile);
+						choose();
+					}
+				}
+			} catch (Exception ex)
+			{
+				ex.printStackTrace();
+			} finally
+			{
+				try
+				{
+					if (writer != null)
+					{
+						writer.close();
+						/*JOptionPane.showMessageDialog(contentPane, "Save Successful");*/
+						stringBuilder.setLength(0);
+						removeHighlights(tfFile);
+						choose();
+					}
+				} catch (IOException ex)
+				{
+					ex.printStackTrace();
+				}
+			}
+		}
+	}
 }
