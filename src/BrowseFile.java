@@ -104,7 +104,7 @@ public class BrowseFile extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1001, 600);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(240, 248, 255));
+		contentPane.setBackground(new Color(240, 250, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -126,7 +126,7 @@ public class BrowseFile extends JFrame
 		});
 
 		tfFile.setEditable(false);
-		tfFile.setBounds(40, 115, 761, 430);
+		tfFile.setBounds(40, 115, 760, 430);
 		tfFile.setVisible(true);
 		
 		contentPane.add(tfFile);
@@ -171,54 +171,11 @@ public class BrowseFile extends JFrame
 		btnBrowse.setBounds(40, 70, 150, 23);
 		contentPane.add(btnBrowse);
 
-		/*JButton btnSave = new JButton("Generate MAC Policy");
-		btnSave.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
-		btnSave.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				File f = new File("./indexes/" + of.filename + ".policy");
-				
-				if (remove != 0)
-				{
-					f.delete();
-					try
-					{
-						f.createNewFile();
-					} catch (IOException e1)
-					{
-						e1.printStackTrace();
-					}
-					JOptionPane.showMessageDialog(contentPane, "Save Successful");
-					remove = 0;
-				} 
-				
-				
-
-			}
-		});
-		btnSave.setBounds(811, 467, 162, 23);
-		contentPane.add(btnSave);*/
-
 		JScrollPane scrollPane = new JScrollPane(tfFile);
-
 		scrollPane.setBounds(40, 115, 761, 430);
 		scrollPane.setVisible(true);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		contentPane.add(scrollPane);
-
-		/*JButton btnRefresh = new JButton("Refresh");
-		btnRefresh.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
-		btnRefresh.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				removeHighlights(tfFile);
-				choose();
-			}
-		});
-		btnRefresh.setBounds(811, 118, 162, 23);
-		contentPane.add(btnRefresh);*/
 		
 		JButton btnCategoryA = new JButton("Security Level 1");
 		btnCategoryA.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
@@ -346,8 +303,32 @@ public class BrowseFile extends JFrame
 		});
 		btnBack.setBounds(810, 520, 162, 23);
 		contentPane.add(btnBack);
-
-		JButton btnRemove = new JButton("Remove All Highlights");
+		
+		JButton btnRemoveSingle = new JButton("Remove Policy");
+		btnRemoveSingle.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
+		btnRemoveSingle.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				hilit = tfFile.getHighlighter();
+				if (hilit.getHighlights() != null)
+				{
+					Highlighter.Highlight[] hL = hilit.getHighlights();
+					for (int i = 0; i < hL.length; i++)
+					{
+						if ((hL[i].getStartOffset() == firstIndex) && (lastIndex == hL[i].getEndOffset()))
+						{
+							hilit.removeHighlight(hL[i]);
+						}
+					}
+					saveHighlight(0);
+				}
+			}
+		});
+		btnRemoveSingle.setBounds(810, 420, 162, 23);
+		contentPane.add(btnRemoveSingle);
+		
+		JButton btnRemove = new JButton("Remove All Policy");
 		btnRemove.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
 		btnRemove.addActionListener(new ActionListener()
 		{
@@ -364,7 +345,7 @@ public class BrowseFile extends JFrame
 				} 
 			}
 		});
-		btnRemove.setBounds(810, 460, 162, 23);
+		btnRemove.setBounds(810, 470, 162, 23);
 		contentPane.add(btnRemove);
 	}
  
