@@ -85,7 +85,7 @@ public class OpenFile
 			}
 		} else
 		{
-			sb.append("No file was selected");
+			sb.append(" ");
 		}
 	}
 

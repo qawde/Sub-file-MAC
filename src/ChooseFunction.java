@@ -126,9 +126,12 @@ public class ChooseFunction extends JFrame
 
 				try
 				{
-					File f = new File("./indexes/" + of.filename + ".policy");
-					if(!f.exists())
+					if(of.filename != null)
 					{
+						File newfile = new File("./temp file/" + of.filename);
+						File f = new File("./indexes/" + of.filename + ".policy");
+						String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
+					
 						try
 						{
 							f.createNewFile();
@@ -136,63 +139,7 @@ public class ChooseFunction extends JFrame
 						{
 							e1.printStackTrace();
 						}
-						
-						String line;
-						BufferedReader br = new BufferedReader(new FileReader(f));
-						StringBuilder sb = new StringBuilder();
-						while ((line = br.readLine()) != null)
-						{
-							sb.append(line);
 							
-						}
-						br.close();
-						
-						
-						if (sb.toString().contains("|"))
-						{
-							String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
-							File newfile = new File("./temp file/" + of.filename);
-							build = new StringBuilder(of.sb.toString());
-							char symbols ='*';
-							
-							String[] high = sb.toString().split(Pattern.quote("|"));
-							for (int i = 0; i < high.length; i++)
-							{
-								String[] details = high[i].split(Pattern.quote(","));
-								int firstindex = Integer.parseInt(details[0]);
-								int lastindex = Integer.parseInt(details[1]);
-								int detail = Integer.parseInt(details[2]);
-								int length = lastindex - firstindex;
-								char[] symbolArr = new char[length];
-								Arrays.fill(symbolArr, symbols);
-								String longsymbols = new String(symbolArr);
-
-								if (detail <= accessID)
-								{
-									build.replace(firstindex, lastindex, longsymbols);
-								}
-							}
-							viewFile(extension, newfile, build);
-						}
-						
-						else if (f.length()==0)
-						{
-							String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
-							File newfile = new File("./temp file/" + of.filename);
-							build = new StringBuilder(of.sb.toString());
-							viewFile(extension, newfile, build);
-						}
-					}
-					else
-					{
-						try
-						{
-							f.createNewFile();
-						} catch (IOException e1)
-						{
-							e1.printStackTrace();
-						}
-						
 						String line;
 						BufferedReader br = new BufferedReader(new FileReader(f));
 						StringBuilder sb = new StringBuilder();
@@ -201,42 +148,10 @@ public class ChooseFunction extends JFrame
 							sb.append(line);
 						}
 						br.close();
-						
-						if (sb.toString().contains("|"))
-						{
-							String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
-							File newfile = new File("./temp file/" + of.filename);
-							build = new StringBuilder(of.sb.toString());
-							char symbols ='*';
 							
-							String[] high = sb.toString().split(Pattern.quote("|"));
-							for (int i = 0; i < high.length; i++)
-							{
-								String[] details = high[i].split(Pattern.quote(","));
-								int firstindex = Integer.parseInt(details[0]);
-								int lastindex = Integer.parseInt(details[1]);
-								int detail = Integer.parseInt(details[2]);
-								int length = lastindex - firstindex;
-								char[] symbolArr = new char[length];
-								Arrays.fill(symbolArr, symbols);
-								String longsymbols = new String(symbolArr);
-
-								if (detail <= accessID)
-								{
-									build.replace(firstindex, lastindex, longsymbols);
-								}
-							}
-							viewFile(extension, newfile, build);
-						}
-						
-						else if (f.length()==0)
-						{
-							String extension = of.filename.substring(of.filename.lastIndexOf(".") + 1, of.filename.length());
-							File newfile = new File("./temp file/" + of.filename);
-							build = new StringBuilder(of.sb.toString());
-							viewFile(extension, newfile, build);
-						}
+						censoredMethod(extension, sb, f, newfile, accessID);
 					}
+					
 				} catch (Exception ex)
 				{
 					ex.printStackTrace();
@@ -388,4 +303,36 @@ public class ChooseFunction extends JFrame
 		}
 	}
 
+	public void censoredMethod(String extension, StringBuilder sb, File f, File newfile,  int accessID)
+	{
+		if (sb.toString().contains("|"))
+		{
+			char symbols ='*';
+			build = new StringBuilder(of.sb.toString());
+			String[] high = sb.toString().split(Pattern.quote("|"));
+			for (int i = 0; i < high.length; i++)
+			{
+				String[] details = high[i].split(Pattern.quote(","));
+				int firstindex = Integer.parseInt(details[0]);
+				int lastindex = Integer.parseInt(details[1]);
+				int detail = Integer.parseInt(details[2]);
+				int length = lastindex - firstindex;
+				char[] symbolArr = new char[length];
+				Arrays.fill(symbolArr, symbols);
+				String longsymbols = new String(symbolArr);
+
+				if (detail <= accessID)
+				{
+					build.replace(firstindex, lastindex, longsymbols);
+				}
+			}
+			viewFile(extension, newfile, build);
+		}
+		
+		else if (f.length()==0)
+		{
+			build = new StringBuilder(of.sb.toString());
+			viewFile(extension, newfile, build);
+		}
+	}
 }

@@ -131,6 +131,11 @@ public class BrowseFile extends JFrame
 		
 		contentPane.add(tfFile);
 		
+		JLabel lblSecurityPolicyGenerator = new JLabel("Security Policy Generator");
+		lblSecurityPolicyGenerator.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		lblSecurityPolicyGenerator.setBounds(296, 11, 339, 49);
+		contentPane.add(lblSecurityPolicyGenerator);
+		
 		JLabel lblPath = new JLabel();
 		lblPath.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblPath.setBounds(200, 57, 440, 50);
@@ -191,9 +196,16 @@ public class BrowseFile extends JFrame
 					Highlighter.Highlight[] hL = hilit.getHighlights();
 					for (int i = 0; i < hL.length; i++)
 					{
-						if ((hL[i].getStartOffset() >= firstIndex) && (lastIndex >= hL[i].getEndOffset()))
+						if (hL[i].getStartOffset() >= firstIndex && lastIndex >= hL[i].getEndOffset())
 						{
 							hilit.removeHighlight(hL[i]);
+						}
+						else if (firstIndex>lastIndex)
+						{
+							if(hL[i].getStartOffset() >= lastIndex && firstIndex >= hL[i].getEndOffset())
+							{
+								hilit.removeHighlight(hL[i]);
+							}
 						}
 					}
 					redHighlight(tfFile);
@@ -218,9 +230,16 @@ public class BrowseFile extends JFrame
 					Highlighter.Highlight[] hL = hilit.getHighlights();
 					for (int i = 0; i < hL.length; i++)
 					{
-						if ((hL[i].getStartOffset() >= firstIndex) && (lastIndex >= hL[i].getEndOffset()))
+						if (hL[i].getStartOffset() >= firstIndex && lastIndex >= hL[i].getEndOffset())
 						{
 							hilit.removeHighlight(hL[i]);
+						}
+						else if (firstIndex>lastIndex)
+						{
+							if(hL[i].getStartOffset() >= lastIndex && firstIndex >= hL[i].getEndOffset())
+							{
+								hilit.removeHighlight(hL[i]);
+							}
 						}
 					}
 					yellowHighlight(tfFile);
@@ -245,9 +264,16 @@ public class BrowseFile extends JFrame
 					Highlighter.Highlight[] hL = hilit.getHighlights();
 					for (int i = 0; i < hL.length; i++)
 					{
-						if ((hL[i].getStartOffset() >= firstIndex) && (lastIndex >= hL[i].getEndOffset()))
+						if (hL[i].getStartOffset() >= firstIndex && lastIndex >= hL[i].getEndOffset())
 						{
 							hilit.removeHighlight(hL[i]);
+						}
+						else if (firstIndex>lastIndex)
+						{
+							if(hL[i].getStartOffset() >= lastIndex && firstIndex >= hL[i].getEndOffset())
+							{
+								hilit.removeHighlight(hL[i]);
+							}
 						}
 					}
 					pinkHighlight(tfFile);
@@ -272,9 +298,16 @@ public class BrowseFile extends JFrame
 					Highlighter.Highlight[] hL = hilit.getHighlights();
 					for (int i = 0; i < hL.length; i++)
 					{
-						if ((hL[i].getStartOffset() >= firstIndex) && (lastIndex >= hL[i].getEndOffset()))
+						if (hL[i].getStartOffset() >= firstIndex && lastIndex >= hL[i].getEndOffset())
 						{
 							hilit.removeHighlight(hL[i]);
+						}
+						else if (firstIndex>lastIndex)
+						{
+							if(hL[i].getStartOffset() >= lastIndex && firstIndex >= hL[i].getEndOffset())
+							{
+								hilit.removeHighlight(hL[i]);
+							}
 						}
 					}
 					blueHighlight(tfFile);
@@ -284,25 +317,6 @@ public class BrowseFile extends JFrame
 		});
 		btnCategoryD.setBounds(810, 300, 162, 23);
 		contentPane.add(btnCategoryD);
-
-		JLabel lblSecurityPolicyGenerator = new JLabel("Security Policy Generator");
-		lblSecurityPolicyGenerator.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		lblSecurityPolicyGenerator.setBounds(296, 11, 339, 49);
-		contentPane.add(lblSecurityPolicyGenerator);
-
-		JButton btnBack = new JButton("Back");
-		btnBack.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
-		btnBack.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				ChooseFunction choosefunction = new ChooseFunction(0);
-				choosefunction.setVisible(true);
-				dispose();
-			}
-		});
-		btnBack.setBounds(810, 520, 162, 23);
-		contentPane.add(btnBack);
 		
 		JButton btnRemoveSingle = new JButton("Remove Policy");
 		btnRemoveSingle.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
@@ -316,9 +330,16 @@ public class BrowseFile extends JFrame
 					Highlighter.Highlight[] hL = hilit.getHighlights();
 					for (int i = 0; i < hL.length; i++)
 					{
-						if ((hL[i].getStartOffset() == firstIndex) && (lastIndex == hL[i].getEndOffset()))
+						if (hL[i].getStartOffset() == firstIndex && lastIndex == hL[i].getEndOffset())
 						{
 							hilit.removeHighlight(hL[i]);
+						}
+						else if (firstIndex>lastIndex)
+						{
+							if(hL[i].getStartOffset() == lastIndex && firstIndex == hL[i].getEndOffset())
+							{
+								hilit.removeHighlight(hL[i]);
+							}
 						}
 					}
 					saveHighlight(0);
@@ -334,21 +355,54 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				String message = "Are you sure you want to remove ALL the policies?";
-				int dialogButton = JOptionPane.YES_NO_OPTION;
-				int dialogResult = JOptionPane.showConfirmDialog(contentPane, message, "Warning", dialogButton);
-				
-				if(dialogResult == 0) 
+				if (hilit.getHighlights() != null)
 				{
-				  removeHighlights(tfFile);
-				  saveHighlight(1);
-				} 
+					String message = "Are you sure you want to remove ALL the policies?";
+					int dialogButton = JOptionPane.YES_NO_OPTION;
+					int dialogResult = JOptionPane.showConfirmDialog(contentPane, message, "Warning", dialogButton);
+					
+					if(dialogResult == 0) 
+					{
+					  removeHighlights(tfFile);
+					  saveHighlight(1);
+					} 
+				}
 			}
 		});
 		btnRemove.setBounds(810, 470, 162, 23);
 		contentPane.add(btnRemove);
+		
+		JButton btnBack = new JButton("Back");
+		btnBack.setFont(new Font("FrankRuehl", Font.PLAIN, 13));
+		btnBack.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				ChooseFunction choosefunction = new ChooseFunction(0);
+				choosefunction.setVisible(true);
+				dispose();
+			}
+		});
+		btnBack.setBounds(810, 520, 162, 23);
+		contentPane.add(btnBack);
 	}
- 
+
+	class MyHighlightPainter extends DefaultHighlighter.DefaultHighlightPainter
+	{
+		public MyHighlightPainter(Color color)
+		{
+			super(color);
+		}
+	}
+	
+	class HighlightPainter extends DefaultHighlighter.DefaultHighlightPainter
+	{
+		public HighlightPainter(Color c)
+		{
+			super(c);
+		}
+	}
+	
 	public void choose()
 	{
 		File f = new File("./indexes/" + of.filename + ".policy");
@@ -396,23 +450,6 @@ public class BrowseFile extends JFrame
 				ex.printStackTrace();
 			}
 
-		}
-	}
-
-	class MyHighlightPainter extends DefaultHighlighter.DefaultHighlightPainter
-	{
-		public MyHighlightPainter(Color color)
-		{
-			super(color);
-
-		}
-	}
-	
-	class HighlightPainter extends DefaultHighlighter.DefaultHighlightPainter
-	{
-		public HighlightPainter(Color c)
-		{
-			super(c);
 		}
 	}
 	
@@ -509,6 +546,104 @@ public class BrowseFile extends JFrame
 		}
 	}
 
+	public void saveHighlight(int remove)
+	{
+		File f = new File("./indexes/" + of.filename + ".policy");
+		
+		Highlighter.Highlight[] hL = hilit.getHighlights();
+		if (remove == 1 && of.filename != null)
+		{
+			f.delete();
+			try
+			{
+				f.createNewFile();
+			} catch (IOException e1)
+			{
+				e1.printStackTrace();
+			}
+		} 
+		else if(of.filename != null)
+		{
+			for (int i = 0; i < hL.length; i++)
+			{
+				stringBuilder.append(hL[i].getStartOffset());
+				stringBuilder.append(",");
+				stringBuilder.append(hL[i].getEndOffset());
+				stringBuilder.append(",");
+				if (hL[i].getPainter() == redPainter)
+				{
+					stringBuilder.append("1");
+					
+				} else if (hL[i].getPainter() == yellowPainter)
+				{
+					stringBuilder.append("2");
+				} else if (hL[i].getPainter() == pinkPainter)
+				{
+					stringBuilder.append("3");
+				}
+	
+				else if (hL[i].getPainter() == bluePainter)
+				{
+					stringBuilder.append("4");
+				}
+				stringBuilder.append("|");
+				mousefirstindex=hL[i].getStartOffset();
+				mouselastindex=hL[i].getEndOffset();
+			}
+			
+			BufferedWriter writer = null;	
+			try{	
+				
+				if (f.length()==0) 
+				{
+					f.delete();
+					writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
+					writer.write(stringBuilder.toString());
+					stringBuilder.setLength(0);
+					choose();
+				}
+				else
+				{
+					int approve= checkAbleHilite(mousefirstindex,mouselastindex,accesslevel);
+	
+					if(approve==1)
+					{
+						f.delete();
+						writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
+						writer.write(stringBuilder.toString());
+						stringBuilder.setLength(0);
+						choose();
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(contentPane, "Lower access level cannot overwrite higher access level.");
+						stringBuilder.setLength(0);
+						removeHighlights(tfFile);
+						choose();
+					}
+				}
+			} catch (Exception ex)
+			{
+				ex.printStackTrace();
+			} finally
+			{
+				try
+				{
+					if (writer != null)
+					{
+						writer.close();
+						stringBuilder.setLength(0);
+						removeHighlights(tfFile);
+						choose();
+					}
+				} catch (IOException ex)
+				{
+					ex.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public void hilite(JTextComponent textComp)
 	{
 		try
@@ -524,9 +659,9 @@ public class BrowseFile extends JFrame
 	
 	public int checkAbleHilite(int mousefirstindex, int mouselastindex, int accesslevel)
 	{
-		List<Integer> listofFi = new ArrayList<Integer>();//example
-		List<Integer> listofLi = new ArrayList<Integer>();//example
-		List<Integer> listofAl = new ArrayList<Integer>();//example
+		List<Integer> listofFi = new ArrayList<Integer>();
+		List<Integer> listofLi = new ArrayList<Integer>();
+		List<Integer> listofAl = new ArrayList<Integer>();
 		int policyfirstindex;
 		int policylastindex;
 		int policyaccesslevel;
@@ -557,7 +692,7 @@ public class BrowseFile extends JFrame
 					for (int i = 0; i < high.length; i++)
 					{
 						String[] details = high[i].split(Pattern.quote(","));
-						policyfirstindex = Integer.parseInt(details[0]);//policy indexes
+						policyfirstindex = Integer.parseInt(details[0]);
 						listofFi.add(policyfirstindex);
 							
 						policylastindex = Integer.parseInt(details[1]);
@@ -713,100 +848,5 @@ public class BrowseFile extends JFrame
         }
     }
 
-	public void saveHighlight(int remove)
-	{
-		File f = new File("./indexes/" + of.filename + ".policy");
-		Highlighter.Highlight[] hL = hilit.getHighlights();
-		if (remove == 1)
-		{
-			f.delete();
-			try
-			{
-				f.createNewFile();
-			} catch (IOException e1)
-			{
-				e1.printStackTrace();
-			}
-		} 
-		else
-		{
-			for (int i = 0; i < hL.length; i++)
-			{
-				stringBuilder.append(hL[i].getStartOffset());
-				stringBuilder.append(",");
-				stringBuilder.append(hL[i].getEndOffset());
-				stringBuilder.append(",");
-				if (hL[i].getPainter() == redPainter)
-				{
-					stringBuilder.append("1");
-					
-				} else if (hL[i].getPainter() == yellowPainter)
-				{
-					stringBuilder.append("2");
-				} else if (hL[i].getPainter() == pinkPainter)
-				{
-					stringBuilder.append("3");
-				}
 	
-				else if (hL[i].getPainter() == bluePainter)
-				{
-					stringBuilder.append("4");
-				}
-				stringBuilder.append("|");
-				mousefirstindex=hL[i].getStartOffset();
-				mouselastindex=hL[i].getEndOffset();
-			}
-			
-			BufferedWriter writer = null;	
-			try{	
-				
-				if (f.length()==0) 
-				{
-					f.delete();
-					writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
-					writer.write(stringBuilder.toString());
-					stringBuilder.setLength(0);
-					choose();
-				}
-				else
-				{
-					int approve= checkAbleHilite(mousefirstindex,mouselastindex,accesslevel);
-	
-					if(approve==1)
-					{
-						f.delete();
-						writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
-						writer.write(stringBuilder.toString());
-						stringBuilder.setLength(0);
-						choose();
-					}
-					else
-					{
-						JOptionPane.showMessageDialog(contentPane, "Lower access level cannot overwrite higher access level.");
-						stringBuilder.setLength(0);
-						removeHighlights(tfFile);
-						choose();
-					}
-				}
-			} catch (Exception ex)
-			{
-				ex.printStackTrace();
-			} finally
-			{
-				try
-				{
-					if (writer != null)
-					{
-						writer.close();
-						stringBuilder.setLength(0);
-						removeHighlights(tfFile);
-						choose();
-					}
-				} catch (IOException ex)
-				{
-					ex.printStackTrace();
-				}
-			}
-		}
-	}
 }
