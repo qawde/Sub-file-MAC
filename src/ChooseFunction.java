@@ -45,13 +45,13 @@ public class ChooseFunction extends JFrame
 {
 
 	private JPanel contentPane;
+	int accessID;
 	String fileName;
+	String index;
+	String sys = System.getProperty("user.home");
 	File selectedFile;
 	OpenFile of = new OpenFile();
 	static StringBuilder build = new StringBuilder();
-	String sys = System.getProperty("user.home");
-	String index;
-	int accessID;
 
 	/**
 	 * Launch the application.
@@ -92,7 +92,8 @@ public class ChooseFunction extends JFrame
 		if (!Login.username.getText().equals("admin"))
 		{
 			btnNewButton.setVisible(false);
-		} else
+		} 
+		else
 		{
 			btnNewButton.addActionListener(new ActionListener()
 			{
@@ -182,34 +183,7 @@ public class ChooseFunction extends JFrame
 		lblPleaseChooseWhat.setBounds(100, 22, 234, 14);
 		contentPane.add(lblPleaseChooseWhat);
 	}
-
-	private static void copyAllRunsToAnotherParagraph(XWPFParagraph oldPar, XWPFParagraph newPar, String text)
-	{
-		for (XWPFRun run : oldPar.getRuns())
-		{
-			String textInRun = run.getText(0);
-			if (textInRun == null || textInRun.isEmpty())
-			{
-				continue;
-			}
-
-			int fontSize = run.getFontSize();
-
-			XWPFRun newRun = newPar.createRun();
-
-			// Copy text
-			newRun.setText(text);
-
-			// Apply the same style
-			// newRun.setFontSize( run.getFontSize() );
-			newRun.setFontFamily(run.getFontFamily());
-			newRun.setBold(run.isBold());
-			newRun.setItalic(run.isItalic());
-			newRun.setStrike(run.isStrike());
-			newRun.setColor(run.getColor());
-		}
-	}
-
+	
 	public void viewFile(String extension, File newfile, StringBuilder build)
 	{
 		String pdf = "pdf";
@@ -280,12 +254,10 @@ public class ChooseFunction extends JFrame
 				{
 					ex.printStackTrace();
 				}
-				
 			}
 
 			else if (txt.equalsIgnoreCase(extension))
 			{
-
 				Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./temp file/" + of.filename), Charset.forName("utf-8")));
 				{
 					writer.write(build.toString());
@@ -296,7 +268,6 @@ public class ChooseFunction extends JFrame
 					}
 				}
 			}
-			
 		} catch (Exception ex)
 		{
 			ex.printStackTrace();
@@ -333,6 +304,33 @@ public class ChooseFunction extends JFrame
 		{
 			build = new StringBuilder(of.sb.toString());
 			viewFile(extension, newfile, build);
+		}
+	}
+
+	private static void copyAllRunsToAnotherParagraph(XWPFParagraph oldPar, XWPFParagraph newPar, String text)
+	{
+		for (XWPFRun run : oldPar.getRuns())
+		{
+			String textInRun = run.getText(0);
+			if (textInRun == null || textInRun.isEmpty())
+			{
+				continue;
+			}
+
+			int fontSize = run.getFontSize();
+
+			XWPFRun newRun = newPar.createRun();
+
+			// Copy text
+			newRun.setText(text);
+
+			// Apply the same style
+			// newRun.setFontSize( run.getFontSize() );
+			newRun.setFontFamily(run.getFontFamily());
+			newRun.setBold(run.isBold());
+			newRun.setItalic(run.isItalic());
+			newRun.setStrike(run.isStrike());
+			newRun.setColor(run.getColor());
 		}
 	}
 }

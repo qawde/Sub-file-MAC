@@ -55,19 +55,19 @@ public class BrowseFile extends JFrame
 	int firstIndex;
 	int lastIndex;
 	int mousefirstindex;
-	int mouselastindex;
+	int mouselastindex;	
+	int remove = 0;
+	int accesslevel=0;
 	String str;
+	String path;
 	String allText;
+	Highlighter hl;
 	Highlighter hilit;
 	static StringBuilder build = new StringBuilder();
 	StringBuilder stringBuilder = new StringBuilder();
 	OpenFile of = new OpenFile();
-	Highlighter hl;
 	JTextArea tfFile = new JTextArea();
-	int remove = 0;
-	int accesslevel=0;
-	String path;
-	
+
 	Highlighter.HighlightPainter redPainter = new MyHighlightPainter(Color.RED);
 	Highlighter.HighlightPainter yellowPainter = new MyHighlightPainter(Color.YELLOW);
 	Highlighter.HighlightPainter pinkPainter = new MyHighlightPainter(Color.PINK);
@@ -324,19 +324,20 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				accesslevel=0;
 				hilit = tfFile.getHighlighter();
 				if (hilit.getHighlights() != null)
 				{
 					Highlighter.Highlight[] hL = hilit.getHighlights();
 					for (int i = 0; i < hL.length; i++)
 					{
-						if (hL[i].getStartOffset() == firstIndex && lastIndex == hL[i].getEndOffset())
+						if (hL[i].getStartOffset() >= firstIndex && lastIndex >= hL[i].getEndOffset())
 						{
 							hilit.removeHighlight(hL[i]);
 						}
 						else if (firstIndex>lastIndex)
 						{
-							if(hL[i].getStartOffset() == lastIndex && firstIndex == hL[i].getEndOffset())
+							if(hL[i].getStartOffset() >= lastIndex && firstIndex >= hL[i].getEndOffset())
 							{
 								hilit.removeHighlight(hL[i]);
 							}
@@ -450,6 +451,19 @@ public class BrowseFile extends JFrame
 				ex.printStackTrace();
 			}
 
+		}
+	}
+	
+	public void hilite(JTextComponent textComp)
+	{
+		try
+		{
+			hl = textComp.getHighlighter();
+			Document doc = textComp.getDocument();
+			String text = doc.getText(0, doc.getLength());
+		} catch (BadLocationException e)
+		{
+			e.printStackTrace();
 		}
 	}
 	
@@ -644,19 +658,6 @@ public class BrowseFile extends JFrame
 		}
 	}
 	
-	public void hilite(JTextComponent textComp)
-	{
-		try
-		{
-			hl = textComp.getHighlighter();
-			Document doc = textComp.getDocument();
-			String text = doc.getText(0, doc.getLength());
-		} catch (BadLocationException e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
 	public int checkAbleHilite(int mousefirstindex, int mouselastindex, int accesslevel)
 	{
 		List<Integer> listofFi = new ArrayList<Integer>();
@@ -700,7 +701,6 @@ public class BrowseFile extends JFrame
 							
 						policyaccesslevel = Integer.parseInt(details[2]);
 						listofAl.add(policyaccesslevel);
-							
 					}
 					
 					for(int k = 0; k < listofFi.size(); k++)
@@ -712,6 +712,15 @@ public class BrowseFile extends JFrame
 					{
 						indexTwo = findNearestNumber(listofLi,mouselastindex);
 					}
+					
+					System.out.println(mousefirstindex);
+					System.out.println(mouselastindex);
+					System.out.println("index 1 fi = " + listofFi.get(indexOne));
+					System.out.println("index 1 li = " + listofLi.get(indexOne));
+					System.out.println("index 2 fi = " + listofFi.get(indexTwo));
+					System.out.println("index 2 li = " + listofLi.get(indexTwo));
+					System.out.println("=======================");
+					
 					if(listofFi.get(indexOne)>= mousefirstindex  && listofLi.get(indexOne) > mousefirstindex)
 					{
 						if(listofFi.get(indexOne)> mouselastindex)
@@ -743,7 +752,6 @@ public class BrowseFile extends JFrame
 					}	
 					else if(listofFi.get(indexOne)< mousefirstindex && mousefirstindex >= listofLi.get(indexOne))
 					{
-						
 						if(listofFi.get(indexOne)== listofFi.get(indexTwo) && listofLi.get(indexOne)== listofLi.get(indexTwo))
 						{
 							if(listofLi.get(indexOne)<mousefirstindex && listofLi.get(indexOne)<mouselastindex)
@@ -846,7 +854,5 @@ public class BrowseFile extends JFrame
         public int compare(String s1, String s2) {
             return (s1.charAt(s1.length()-1) - s2.charAt(s2.length()-1));
         }
-    }
-
-	
+    }	
 }

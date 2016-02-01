@@ -23,7 +23,6 @@ public class OpenFile
 
 	public void ChooseFile() throws Exception
 	{
-
 		fc.setCurrentDirectory(new File(System.getProperty("user.home")));
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.addChoosableFileFilter(new FileNameExtensionFilter("Text Documents", "txt"));
@@ -48,10 +47,8 @@ public class OpenFile
 
 			if (pdf.equalsIgnoreCase(extension))
 			{
-
 				PDFManager pdfManager = new PDFManager();
 				pdfManager.setFilePath((selectedFile.getAbsolutePath()));
-
 				sb = new StringBuilder(pdfManager.ToText());
 			}
 
@@ -88,5 +85,4 @@ public class OpenFile
 			sb.append(" ");
 		}
 	}
-
 }
