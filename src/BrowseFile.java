@@ -713,13 +713,13 @@ public class BrowseFile extends JFrame
 						indexTwo = findNearestNumber(listofLi,mouselastindex);
 					}
 					
-					System.out.println(mousefirstindex);
+				/*	System.out.println(mousefirstindex);
 					System.out.println(mouselastindex);
 					System.out.println("index 1 fi = " + listofFi.get(indexOne));
 					System.out.println("index 1 li = " + listofLi.get(indexOne));
 					System.out.println("index 2 fi = " + listofFi.get(indexTwo));
 					System.out.println("index 2 li = " + listofLi.get(indexTwo));
-					System.out.println("=======================");
+					System.out.println("=======================");*/
 					
 					if(listofFi.get(indexOne)>= mousefirstindex  && listofLi.get(indexOne) > mousefirstindex)
 					{
@@ -727,6 +727,10 @@ public class BrowseFile extends JFrame
 						{
 							approve =1;
 						}
+						/*else if(listofFi.get(indexOne)< mouselastindex)
+						{
+							mousefirstindex 
+						}*/
 						else if(mouselastindex >= listofFi.get(indexOne)&& listofLi.get(indexOne) >= mouselastindex)
 						{
 							if(listofAl.get(indexOne)>= accesslevel)
@@ -795,7 +799,9 @@ public class BrowseFile extends JFrame
 				ex.printStackTrace();
 			}	
 		}
-		return approve;
+		accesslevel=0;
+		System.out.println(approve);
+		return approve;		
 	}
 	
 	public static int findNearestNumber(List<Integer> indexes, int mouseIndex)

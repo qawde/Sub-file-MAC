@@ -24,8 +24,8 @@ public class testing
 		int policyfirstindex;
 		int policylastindex;
 		int policyaccesslevel;
-		int mousefirstindex = 280;
-		int mouselastindex = 300;
+		int mousefirstindex = 616;
+		int mouselastindex = 860;
 		int accesslevel = 4;
 		int approve = 0;
 		int indexOne = 0;
@@ -81,32 +81,17 @@ public class testing
 					}
 					
 					
-					if(listofFi.get(indexOne)< mousefirstindex && listofLi.get(indexOne)< mousefirstindex)
+					if(listofFi.get(indexOne)>= mousefirstindex  && listofLi.get(indexOne) > mousefirstindex)
 					{
-						if(listofFi.get(indexTwo)> mouselastindex)
-						{
-							approve=1;
-						}
-						else
-						{
-							if(listofAl.get(indexTwo)>= accesslevel)
-							{
-								approve=1;
-							}
-							else
-							{
-								approve=0;
-							}
-						}
-					
-					}	
-					else if(mousefirstindex < listofFi.get(indexOne) && mousefirstindex < listofLi.get(indexOne))
-					{
-						if(mouselastindex < listofFi.get(indexOne))
+						if(listofFi.get(indexOne)> mouselastindex)
 						{
 							approve =1;
 						}
-						else if(mouselastindex > listofFi.get(indexOne)&& mouselastindex < listofLi.get(indexOne))
+						else if(listofFi.get(indexOne)< mouselastindex)
+						{
+							accesslevel=middleIndexes(listofFi, mousefirstindex,mouselastindex);
+						}
+						else if(mouselastindex >= listofFi.get(indexOne)&& listofLi.get(indexOne) >= mouselastindex)
 						{
 							if(listofAl.get(indexOne)>= accesslevel)
 							{
@@ -128,7 +113,35 @@ public class testing
 								approve=0;
 							}
 						}
-					}
+					}	
+					else if(listofFi.get(indexOne)< mousefirstindex && mousefirstindex >= listofLi.get(indexOne))
+					{
+						if(listofFi.get(indexOne)== listofFi.get(indexTwo) && listofLi.get(indexOne)== listofLi.get(indexTwo))
+						{
+							if(listofLi.get(indexOne)<mousefirstindex && listofLi.get(indexOne)<mouselastindex)
+							{
+								approve=1;
+							}
+						}
+						
+						else if(listofFi.get(indexTwo)> mouselastindex)
+						{
+							approve=1;
+						}
+						
+						else
+						{
+							if(listofAl.get(indexTwo)>= accesslevel)
+							{
+								approve=1;
+							}
+							else
+							{
+								approve=0;
+							}
+						}
+						
+					}	
 					else
 					{
 						if(listofAl.get(indexOne)>= accesslevel && listofAl.get(indexTwo)>= accesslevel)
@@ -142,8 +155,8 @@ public class testing
 					}
 				}
 				
-				System.out.println("\n");
-				/*System.out.println(fiPassed);*/
+				/*System.out.println("\n");
+				System.out.println(fiPassed);
 				System.out.println(listofAl);
 				
 				System.out.println(listofFi.get(indexOne));
@@ -152,13 +165,26 @@ public class testing
 				System.out.println(listofLi.get(indexTwo));
 				
 				System.out.println(accesslevel);
-				System.out.println(approve);
+				System.out.println(approve);*/
 			} catch (Exception ex)
 			{
 				ex.printStackTrace();
 			}	
 			
 		}
+	}
+	public static int middleIndexes(List<Integer> indexes, int mousefirstindex, int mouselastindex)
+	{
+		List<Integer> listofIndexes = new ArrayList<Integer>();
+		int accesslevel=0;
+		for(int i=0; i<indexes.size(); i++)
+		{
+			if(indexes.get(i)>mousefirstindex && mouselastindex>indexes.get(i))
+			{
+				listofIndexes.add(i);
+			}
+		}
+		return accesslevel;
 	}
 	
 	public static int findNearestNumber(List<Integer> indexes, int mouseIndex)
