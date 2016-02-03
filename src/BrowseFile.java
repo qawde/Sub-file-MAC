@@ -713,13 +713,13 @@ public class BrowseFile extends JFrame
 						indexTwo = findNearestNumber(listofLi,mouselastindex);
 					}
 					
-				/*	System.out.println(mousefirstindex);
+					System.out.println(mousefirstindex);
 					System.out.println(mouselastindex);
 					System.out.println("index 1 fi = " + listofFi.get(indexOne));
 					System.out.println("index 1 li = " + listofLi.get(indexOne));
 					System.out.println("index 2 fi = " + listofFi.get(indexTwo));
 					System.out.println("index 2 li = " + listofLi.get(indexTwo));
-					System.out.println("=======================");*/
+					System.out.println("=======================");
 					
 					if(listofFi.get(indexOne)>= mousefirstindex  && listofLi.get(indexOne) > mousefirstindex)
 					{
@@ -727,10 +727,27 @@ public class BrowseFile extends JFrame
 						{
 							approve =1;
 						}
-						/*else if(listofFi.get(indexOne)< mouselastindex)
+						else if(listofFi.get(indexOne)< mouselastindex)
 						{
-							mousefirstindex 
-						}*/
+							if(listofFi.get(indexTwo)>mousefirstindex && listofLi.get(indexTwo)>mousefirstindex)
+							{
+								
+								int checkMiddleAl=middleIndexes(listofFi,listofAl,mousefirstindex,mouselastindex);
+								if(checkMiddleAl>accesslevel)
+								{
+									approve=0;
+								}
+								else
+								{
+									
+									approve=1;
+								}
+							}
+							else
+							{
+								approve=0;
+							}
+						}
 						else if(mouselastindex >= listofFi.get(indexOne)&& listofLi.get(indexOne) >= mouselastindex)
 						{
 							if(listofAl.get(indexOne)>= accesslevel)
@@ -754,7 +771,7 @@ public class BrowseFile extends JFrame
 							}
 						}
 					}	
-					else if(listofFi.get(indexOne)< mousefirstindex && mousefirstindex >= listofLi.get(indexOne))
+					else if(mousefirstindex >= listofFi.get(indexOne)  && mousefirstindex >= listofLi.get(indexOne))
 					{
 						if(listofFi.get(indexOne)== listofFi.get(indexTwo) && listofLi.get(indexOne)== listofLi.get(indexTwo))
 						{
@@ -800,36 +817,35 @@ public class BrowseFile extends JFrame
 			}	
 		}
 		accesslevel=0;
-		System.out.println(approve);
 		return approve;		
 	}
 	
-	public static int findNearestNumber(List<Integer> indexes, int mouseIndex)
+	public static int findNearestNumber(List<Integer> listofFi, int mouseIndex)
 	{
 	    int min=0,max=0,nearestNumber,index;
 
-	    for(int i=0; i<indexes.size(); i++)
+	    for(int i=0; i<listofFi.size(); i++)
 	    {
-	        if(indexes.get(i)<mouseIndex)
+	        if(listofFi.get(i)<mouseIndex)
 	        {
 	            if(min==0)
 	            {
-	                min=indexes.get(i);
+	                min=listofFi.get(i);
 	            }
-	            else if(indexes.get(i)>min)
+	            else if(listofFi.get(i)>min)
 	            {
-	                min=indexes.get(i);
+	                min=listofFi.get(i);
 	            }
 	        }
-	        else if(indexes.get(i)>mouseIndex)
+	        else if(listofFi.get(i)>mouseIndex)
 	        {
 	            if(max==0)
 	            {
-	                max=indexes.get(i);
+	                max=listofFi.get(i);
 	            }
-	            else if(indexes.get(i)<max)
+	            else if(listofFi.get(i)<max)
 	            {
-	                max=indexes.get(i);
+	                max=listofFi.get(i);
 	            }
 	        }
 	        else
@@ -841,12 +857,12 @@ public class BrowseFile extends JFrame
 	    if(Math.abs(mouseIndex-min)<Math.abs(mouseIndex-max))
 	    {
 	        nearestNumber=min;
-	        index = indexes.indexOf(nearestNumber);
+	        index = listofFi.indexOf(nearestNumber);
 	    }
 	    else
 	    {
 	        nearestNumber=max;
-	        index = indexes.indexOf(nearestNumber);
+	        index = listofFi.indexOf(nearestNumber);
 	    }
 
 	    if(index<0)
@@ -854,6 +870,27 @@ public class BrowseFile extends JFrame
 	    	index = 0;
 	    }
 	    return index;
+	}
+	
+	public static int middleIndexes(List<Integer> listofFi,List<Integer> listofAl, int mousefirstindex, int mouselastindex)
+	{
+		List<Integer> listofIndexes = new ArrayList<Integer>();
+		int accesslevel=5;
+		for(int i=0; i<listofFi.size(); i++)
+		{
+			if(listofFi.get(i)>mousefirstindex && mouselastindex>listofFi.get(i))
+			{
+				listofIndexes.add(i);
+			}
+		}
+		for(int j=0; j<listofIndexes.size(); j++)
+		{
+			if(listofAl.get(listofIndexes.get(j)) < accesslevel)
+			{ 
+				accesslevel=listofAl.get(listofIndexes.get(j));
+			}
+		}
+		return accesslevel;
 	}
 	
 	private static class lastchar implements Comparator<String>{

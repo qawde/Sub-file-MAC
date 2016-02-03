@@ -24,8 +24,8 @@ public class testing
 		int policyfirstindex;
 		int policylastindex;
 		int policyaccesslevel;
-		int mousefirstindex = 616;
-		int mouselastindex = 860;
+		int mousefirstindex =328;
+		int mouselastindex = 769;
 		int accesslevel = 4;
 		int approve = 0;
 		int indexOne = 0;
@@ -89,7 +89,15 @@ public class testing
 						}
 						else if(listofFi.get(indexOne)< mouselastindex)
 						{
-							accesslevel=middleIndexes(listofFi, mousefirstindex,mouselastindex);
+							int checkMiddleAl=middleIndexes(listofFi,listofAl,mousefirstindex,mouselastindex);
+							if(checkMiddleAl<accesslevel)
+							{
+								approve=0;
+							}
+							else
+							{
+								approve=1;
+							}
 						}
 						else if(mouselastindex >= listofFi.get(indexOne)&& listofLi.get(indexOne) >= mouselastindex)
 						{
@@ -173,15 +181,22 @@ public class testing
 			
 		}
 	}
-	public static int middleIndexes(List<Integer> indexes, int mousefirstindex, int mouselastindex)
+	public static int middleIndexes(List<Integer> listofFi,List<Integer> listofAl, int mousefirstindex, int mouselastindex)
 	{
 		List<Integer> listofIndexes = new ArrayList<Integer>();
-		int accesslevel=0;
-		for(int i=0; i<indexes.size(); i++)
+		int accesslevel=5;
+		for(int i=0; i<listofFi.size(); i++)
 		{
-			if(indexes.get(i)>mousefirstindex && mouselastindex>indexes.get(i))
+			if(listofFi.get(i)>mousefirstindex && mouselastindex>listofFi.get(i))
 			{
 				listofIndexes.add(i);
+			}
+		}
+		for(int j=0; j<listofIndexes.size(); j++)
+		{
+			if(listofAl.get(listofIndexes.get(j)) < accesslevel)
+			{ 
+				accesslevel=listofAl.get(listofIndexes.get(j));
 			}
 		}
 		return accesslevel;
