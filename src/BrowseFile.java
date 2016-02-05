@@ -210,7 +210,7 @@ public class BrowseFile extends JFrame
 					}
 					redHighlight(tfFile);
 				}
-				saveHighlight(0);
+				saveHighlight(0,0);
 			}
 		});
 		btnCategoryA.setBounds(810, 120, 162, 23);
@@ -244,7 +244,7 @@ public class BrowseFile extends JFrame
 					}
 					yellowHighlight(tfFile);
 				}
-				saveHighlight(0);
+				saveHighlight(0,0);
 			}
 		});
 		btnCategoryB.setBounds(810, 180, 162, 23);
@@ -278,7 +278,7 @@ public class BrowseFile extends JFrame
 					}
 					pinkHighlight(tfFile);
 				}
-				saveHighlight(0);
+				saveHighlight(0,0);
 			}
 		});
 		btnCategoryC.setBounds(810, 240, 162, 23);
@@ -312,7 +312,7 @@ public class BrowseFile extends JFrame
 					}
 					blueHighlight(tfFile);
 				}
-				saveHighlight(0);
+				saveHighlight(0,0);
 			}
 		});
 		btnCategoryD.setBounds(810, 300, 162, 23);
@@ -324,7 +324,6 @@ public class BrowseFile extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				accesslevel=0;
 				hilit = tfFile.getHighlighter();
 				if (hilit.getHighlights() != null)
 				{
@@ -343,7 +342,7 @@ public class BrowseFile extends JFrame
 							}
 						}
 					}
-					saveHighlight(0);
+					saveHighlight(0,1);
 				}
 			}
 		});
@@ -365,7 +364,7 @@ public class BrowseFile extends JFrame
 					if(dialogResult == 0) 
 					{
 					  removeHighlights(tfFile);
-					  saveHighlight(1);
+					  saveHighlight(1,0);
 					} 
 				}
 			}
@@ -560,7 +559,7 @@ public class BrowseFile extends JFrame
 		}
 	}
 
-	public void saveHighlight(int remove)
+	public void saveHighlight(int remove,int singleremove)
 	{
 		File f = new File("./indexes/" + of.filename + ".policy");
 		
@@ -620,7 +619,7 @@ public class BrowseFile extends JFrame
 				{
 					int approve= checkAbleHilite(mousefirstindex,mouselastindex,accesslevel);
 	
-					if(approve==1)
+					if(approve==1||singleremove==1)
 					{
 						f.delete();
 						writer = new BufferedWriter(new FileWriter(f.getAbsolutePath(), false));
@@ -721,100 +720,25 @@ public class BrowseFile extends JFrame
 					System.out.println(accesslevel);
 					System.out.println("=======================");
 					
-					/*if(listofFi.get(nearsetFiIndex)>= mousefirstindex  && listofLi.get(nearsetFiIndex) > mousefirstindex)
+					if((listofFi.get(nearestFiIndex) >= mousefirstindex) && (listofLi.get(nearestLiIndex) <= mouselastindex))
 					{
-						if(listofFi.get(nearsetFiIndex)> mouselastindex)
-						{
-							approve =1;
-						}
-						else if(listofFi.get(nearsetFiIndex)< mouselastindex)
-						{
-							if(listofFi.get(nearsetLiIndex)>mousefirstindex && listofLi.get(nearsetLiIndex)>mousefirstindex)
-							{
-								
-								int checkMiddleAl=middleIndexes(listofFi,listofAl,mousefirstindex,mouselastindex);
-								if(checkMiddleAl>accesslevel)
-								{
-									approve=0;
-								}
-								else
-								{
-									
-									approve=1;
-								}
-							}
-							else
+						 int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+						 System.out.println(chkMiddleAl);
+						 if(accesslevel >= chkMiddleAl)
 							{
 								approve=0;
 							}
-						}
-						else if(mouselastindex >= listofFi.get(nearsetFiIndex)&& listofLi.get(nearsetFiIndex) >= mouselastindex)
-						{
-							if(listofAl.get(nearsetFiIndex)>= accesslevel)
-							{
-								approve=1;
-							}
 							else
 							{
-								approve=0;
-							}
-						}
-						else
-						{
-							if(listofAl.get(nearsetLiIndex)>= accesslevel)
-							{
 								approve=1;
 							}
-							else
-							{
-								approve=0;
-							}
-						}
-					}	
-					else if(mousefirstindex >= listofFi.get(nearsetFiIndex)  && mousefirstindex >= listofLi.get(nearsetFiIndex))
-					{
-						if(listofFi.get(nearsetFiIndex)== listofFi.get(nearsetLiIndex) && listofLi.get(nearsetFiIndex)== listofLi.get(nearsetLiIndex))
-						{
-							if(listofLi.get(nearsetFiIndex)<mousefirstindex && listofLi.get(nearsetFiIndex)<mouselastindex)
-							{
-								approve=1;
-							}
-						}
-						
-						else if(listofFi.get(nearsetLiIndex)> mouselastindex)
-						{
-							approve=1;
-						}
-						
-						else
-						{
-							if(listofAl.get(nearsetLiIndex)>= accesslevel)
-							{
-								approve=1;
-							}
-							else
-							{
-								approve=0;
-							}
-						}
-						
-					}	
-					else
-					{
-						if(listofAl.get(nearsetFiIndex)>= accesslevel && listofAl.get(nearsetLiIndex)>= accesslevel)
-						{
-							approve=1;
-						}
-						else
-						{
-							approve=0;
-						}
-					}*/
-					if(listofFi.get(nearestFiIndex) >= listofFi.get(nearestLiIndex))
+					}
+					
+					else if(listofFi.get(nearestFiIndex) >= listofFi.get(nearestLiIndex))
 					{
 						if((mousefirstindex > listofFi.get(nearestLiIndex)) && (mousefirstindex < listofLi.get(nearestLiIndex)))
 						{
-							if((listofAl.get(nearestLiIndex))<accesslevel)
+							if((listofAl.get(nearestLiIndex)) < accesslevel)
 							{
 								approve=0;
 							}
@@ -838,6 +762,55 @@ public class BrowseFile extends JFrame
 						{
 							approve=1;
 						}
+						/*else if(mousefirstindex<listofFi.get(nearestLiIndex))
+						{
+							int passed = 0;
+							int al=0;
+							List<Integer>indexOfFiAl = new ArrayList<Integer>();
+
+							for(int i=0; i<listofFi.size(); i++)
+							{
+								if(listofLi.get(i)>mousefirstindex)
+								{
+									passed++;
+									indexOfFiAl.add(i);
+								}
+							}
+							if(passed>=1)
+							{
+								for(int j=0; j<indexOfFiAl.size(); j++)
+								{
+									if(listofAl.get(indexOfFiAl.get(j)) == 1)
+									{ 
+										al=1;
+									}
+									else if(listofAl.get(indexOfFiAl.get(j)) == 2)
+									{ 
+										al=2;
+									}
+									else if(listofAl.get(indexOfFiAl.get(j)) == 3)
+									{ 
+										al=3;
+									}
+									else if(listofAl.get(indexOfFiAl.get(j)) == 4)
+									{ 
+										al=4;
+									}
+									else
+									{
+										al=5;
+									}
+								}
+								if(al>accesslevel)
+								{
+									approve=0;
+								}
+								else
+								{
+									approve=1;
+								}
+							}
+						}*/
 						else if((mousefirstindex > listofFi.get(nearestLiIndex)) && mouselastindex > listofLi.get(nearestLiIndex))
 						{
 							approve=1;
@@ -851,7 +824,7 @@ public class BrowseFile extends JFrame
 					{
 						if((mousefirstindex > listofFi.get(nearestFiIndex)) && (mousefirstindex < listofLi.get(nearestFiIndex)))
 						{
-							if((listofAl.get(nearestLiIndex)) < accesslevel)
+							if((listofAl.get(nearestFiIndex)) < accesslevel)
 							{
 								approve=0;
 							}
@@ -873,8 +846,57 @@ public class BrowseFile extends JFrame
 						}
 						else if((mousefirstindex < listofFi.get(nearestFiIndex)) && (mouselastindex < listofFi.get(nearestFiIndex)))
 						{
-							approve=1;
+							approve=1;//here
 						}
+						/*else if(mousefirstindex<listofFi.get(nearestFiIndex))
+						{
+							int passed = 0;
+							int al=0;
+							List<Integer>indexOfFiAl = new ArrayList<Integer>();
+
+							for(int i=0; i<listofFi.size(); i++)
+							{
+								if(listofLi.get(i)>mousefirstindex)
+								{
+									passed++;
+									indexOfFiAl.add(i);
+								}
+							}
+							if(passed>=1)
+							{
+								for(int j=0; j<indexOfFiAl.size(); j++)
+								{
+									if(listofAl.get(indexOfFiAl.get(j)) == 1)
+									{ 
+										al=1;
+									}
+									else if(listofAl.get(indexOfFiAl.get(j)) == 2)
+									{ 
+										al=2;
+									}
+									else if(listofAl.get(indexOfFiAl.get(j)) == 3)
+									{ 
+										al=3;
+									}
+									else if(listofAl.get(indexOfFiAl.get(j)) == 4)
+									{ 
+										al=4;
+									}
+									else
+									{
+										al=5;
+									}
+								}
+								if(al>accesslevel)
+								{
+									approve=0;
+								}
+								else
+								{
+									approve=1;
+								}
+							}
+						}*/
 						else if((mousefirstindex > listofFi.get(nearestFiIndex)) && mouselastindex > listofLi.get(nearestFiIndex))
 						{
 							approve=1;
@@ -884,10 +906,6 @@ public class BrowseFile extends JFrame
 							approve=0;
 						}
 					}
-					/*else if()//middle indexes
-					{
-						
-					}*/
 					else
 					{
 						approve=0;
