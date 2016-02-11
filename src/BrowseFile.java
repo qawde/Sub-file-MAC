@@ -674,8 +674,8 @@ public class BrowseFile extends JFrame
 		{
 			try
 			{
-				BufferedReader br = new BufferedReader(new FileReader(f));
 				String line;
+				BufferedReader br = new BufferedReader(new FileReader(f));
 				StringBuilder sb = new StringBuilder();
 				
 				while ((line = br.readLine()) != null)
@@ -723,8 +723,28 @@ public class BrowseFile extends JFrame
 					//first
 					if((listofFi.get(nearestFiIndex) >= mousefirstindex) && (listofLi.get(nearestLiIndex) <= mouselastindex))
 					{
-						//System.out.println("hi");
-						if(listofFi.get(nearestFiIndex)<=listofFi.get(nearestLiIndex))
+						boolean middle = isMiddlehighlight(listofFi, listofLi, mousefirstindex, mouselastindex);
+						if (middle== true)
+						{
+							int outerAl=outerhighlight(listofFi, listofLi, listofAl, mousefirstindex, mouselastindex);
+							if(accesslevel<=outerAl)
+							{
+								int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+								if (accesslevel<=chkMiddleAl)
+								{
+									approve=1;
+								}
+								else
+								{
+									approve=0;
+								}
+							}
+							else
+							{
+								approve=0;
+							}
+						}
+						else if(listofFi.get(nearestFiIndex)<=listofFi.get(nearestLiIndex))
 						{
 							int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
 							System.out.println("chkMiddleAl "+chkMiddleAl);
@@ -739,40 +759,147 @@ public class BrowseFile extends JFrame
 						}
 						else
 						{
-							if(listofFi.get(nearestLiIndex) <= listofFi.get(nearestFiIndex))
-								if((listofAl.get(nearestLiIndex)) >= accesslevel)
+							if(listofFi.get(nearestLiIndex) <= listofFi.get(nearestFiIndex))//here
+								if((mousefirstindex > listofFi.get(nearestLiIndex)) && (mousefirstindex < listofLi.get(nearestLiIndex)))
 								{
-									System.out.println(listofAl.get(nearestFiIndex));
+									if((listofAl.get(nearestLiIndex)) < accesslevel)
+									{
+										approve=0;
+									}
+									else
+									{
+										approve=1;
+									}
+								}
+								else if((mouselastindex > listofFi.get(nearestLiIndex)) && (mouselastindex < listofLi.get(nearestLiIndex)))
+								{
+									if((listofAl.get(nearestLiIndex)) < accesslevel)
+									{
+										approve=0;
+									}
+									else
+									{
+										approve=1;
+									}
+								}
+								else if((mousefirstindex < listofFi.get(nearestLiIndex)) && (mouselastindex < listofFi.get(nearestLiIndex)))
+								{
+									approve=1;
+								}
+								else if((mousefirstindex < listofFi.get(nearestLiIndex)) && (mouselastindex == listofFi.get(nearestLiIndex)))
+								{
+									approve=1;
+								}
+								else if((mousefirstindex > listofFi.get(nearestLiIndex)) && mouselastindex > listofLi.get(nearestLiIndex))
+								{
 									approve=1;
 								}
 								else
 								{
 									approve=0;
 								}
-							else if(listofFi.get(nearestLiIndex) >= listofFi.get(nearestFiIndex))
-								if((listofAl.get(nearestFiIndex)) >= accesslevel)
+							else if(listofFi.get(nearestLiIndex) >= listofFi.get(nearestFiIndex))//here
+								if((mousefirstindex > listofFi.get(nearestFiIndex)) && (mousefirstindex < listofLi.get(nearestFiIndex)))
 								{
-									approve=1;
+									if((listofAl.get(nearestFiIndex)) > accesslevel)
+									{
+										int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+										if(accesslevel <= chkMiddleAl)
+										{
+											approve=1;
+										}
+										else
+										{
+											approve=0;
+										}
+									}
+									else
+									{
+										approve=0;
+									}
 								}
-								else
+								else if((mouselastindex > listofFi.get(nearestFiIndex)) && (mouselastindex < listofLi.get(nearestFiIndex)))
 								{
-									approve=0;
+									if((listofAl.get(nearestFiIndex)) > accesslevel)
+									{
+										int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+										if(accesslevel <= chkMiddleAl)
+										{
+											approve=1;
+										}
+										else
+										{
+											approve=0;
+										}
+									}
+									else
+									{
+										approve=0;
+									}
+								}
+								else if((mousefirstindex < listofFi.get(nearestFiIndex)) && (mouselastindex < listofFi.get(nearestFiIndex)))
+								{
+									int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+									if(accesslevel <= chkMiddleAl)
+									{
+										approve=1;
+									}
+									else
+									{
+										approve=0;
+									}
+								}
+								else if((mousefirstindex < listofFi.get(nearestFiIndex)) && (mouselastindex == listofFi.get(nearestFiIndex)))
+								{
+									int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+									if(accesslevel <= chkMiddleAl)
+									{
+										approve=1;
+									}
+									else
+									{
+										approve=0;
+									}
+								}
+								else if((mousefirstindex > listofFi.get(nearestFiIndex)) && mouselastindex > listofLi.get(nearestFiIndex))
+								{
+									int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+									if(accesslevel <= chkMiddleAl)
+									{
+										approve=1;
+									}
+									else
+									{
+										approve=0;
+									}
+								}
+								else if(mouselastindex>listofFi.get(nearestLiIndex) && mouselastindex<listofLi.get(nearestLiIndex))
+								{
+									int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+									if(accesslevel <= chkMiddleAl)
+									{
+										approve=1;
+									}
+									else
+									{
+										approve=0;
+									}
 								}
 						}
 					}
 					//second
-					else if(listofFi.get(nearestFiIndex) >= listofFi.get(nearestLiIndex))
+					else if(listofFi.get(nearestLiIndex) <= listofFi.get(nearestFiIndex))
 					{
-						
 						List<Integer>indexOfFiAl = new ArrayList<Integer>();
+						List<Integer>indexOfLiAl = new ArrayList<Integer>();
 						int indexFi=0;
+						int indexLi=0;
 						for(int i=0; i<listofFi.size(); i++)
 						{
 							if(listofFi.get(i)<mousefirstindex)
 							{	
 								indexOfFiAl.add(i);
 							}
-							
 						}
 						for(int i=0; i<indexOfFiAl.size(); i++)
 						{
@@ -782,14 +909,47 @@ public class BrowseFile extends JFrame
 							}
 						}
 						
-						if ((listofFi.get(indexFi)<mousefirstindex && mousefirstindex<listofLi.get(indexFi)) && (mouselastindex > listofFi.get(nearestFiIndex) && mouselastindex<listofLi.get(nearestFiIndex)))
+						for(int i=0; i<listofLi.size(); i++)
+						{
+							if(listofFi.get(i)<mouselastindex)
+							{	
+								indexOfLiAl.add(i);
+							}
+						}
+						for(int i=0; i<indexOfLiAl.size(); i++)
+						{
+							if(listofLi.get(indexOfLiAl.get(i))>mouselastindex)
+							{
+								indexLi=indexOfLiAl.get(i);
+							}
+						}
+						
+						boolean middle = isMiddlehighlight(listofFi, listofLi, mousefirstindex, mouselastindex);
+						if (middle== true)
+						{
+							int outerAl=outerhighlight(listofFi, listofLi, listofAl, mousefirstindex, mouselastindex);
+							if(accesslevel<=outerAl)
+							{
+								int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+								if (accesslevel<=chkMiddleAl)
+								{
+									approve=1;
+								}
+								else
+								{
+									approve=0;
+								}
+							}
+							else
+							{
+								approve=0;
+							}
+						}
+						else if ((listofFi.get(indexFi)<mousefirstindex && mousefirstindex<listofLi.get(indexFi)) && (mouselastindex > listofFi.get(nearestFiIndex) && mouselastindex<listofLi.get(nearestFiIndex)))
 						{
 							int al=0;
-							System.out.println("indexOfFiAl before= "+indexOfFiAl);
-							
 							for(int j=0; j<indexOfFiAl.size(); j++)
 							{
-								System.out.println("indexOfFiAl after= "+indexOfFiAl.get(j));
 								if(listofAl.get(indexFi) == 1)
 								{ 
 									al=1;
@@ -815,16 +975,25 @@ public class BrowseFile extends JFrame
 									al=5;
 								}
 							}
-							System.out.println("al= "+al);
-							if(al<accesslevel)
+
+							int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+							if(accesslevel <= al)
 							{
-								approve=0;
+								if(accesslevel <= chkMiddleAl)
+								{
+									approve=1;
+								}
+								else
+								{
+									approve=0;
+								}
 							}
 							else
 							{
-								approve=1;
-							}
+								approve=0;
+							}						
 						}
+						//else if ((listofFi.get(indexLi)<mouselastindex && mouselastindex<listofLi.get(indexLi)) && (mousefirstindex > listofFi.get(nearestFiIndex) && mousefirstindex<listofLi.get(nearestFiIndex)))
 						else if((mousefirstindex > listofFi.get(nearestLiIndex)) && (mousefirstindex < listofLi.get(nearestLiIndex)))
 						{
 							if((listofAl.get(nearestLiIndex)) < accesslevel)
@@ -867,7 +1036,6 @@ public class BrowseFile extends JFrame
 					//third
 					else if(listofFi.get(nearestLiIndex)>= listofFi.get(nearestFiIndex) )
 					{
-						System.out.println("hi");
 						List<Integer>indexOfFiAl = new ArrayList<Integer>();
 						int indexFi=0;
 						for(int i=0; i<listofFi.size(); i++)
@@ -876,7 +1044,6 @@ public class BrowseFile extends JFrame
 							{	
 								indexOfFiAl.add(i);
 							}
-							
 						}
 						for(int i=0; i<indexOfFiAl.size(); i++)
 						{
@@ -885,14 +1052,32 @@ public class BrowseFile extends JFrame
 								indexFi=indexOfFiAl.get(i);
 							}
 						}
-						if ((listofFi.get(indexFi)<mousefirstindex && mousefirstindex<listofLi.get(indexFi)) && (mouselastindex > listofFi.get(nearestFiIndex) && mouselastindex<listofLi.get(nearestFiIndex)))
+						boolean middle = isMiddlehighlight(listofFi, listofLi, mousefirstindex, mouselastindex);
+						if (middle== true)
+						{
+							int outerAl=outerhighlight(listofFi, listofLi, listofAl, mousefirstindex, mouselastindex);
+							if(accesslevel<=outerAl)
+							{
+								int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+								if (accesslevel<=chkMiddleAl)
+								{
+									approve=1;
+								}
+								else
+								{
+									approve=0;
+								}
+							}
+							else
+							{
+								approve=0;
+							}
+						}
+						else if ((listofFi.get(indexFi)<mousefirstindex && mousefirstindex<listofLi.get(indexFi)) && (mouselastindex > listofFi.get(nearestFiIndex) && mouselastindex<listofLi.get(nearestFiIndex)))
 						{
 							int al=0;
-							System.out.println("indexOfFiAl before= "+indexOfFiAl);
-							
 							for(int j=0; j<indexOfFiAl.size(); j++)
 							{
-								System.out.println("indexOfFiAl after= "+indexOfFiAl.get(j));
 								if(listofAl.get(indexFi) == 1)
 								{ 
 									al=1;
@@ -915,32 +1100,39 @@ public class BrowseFile extends JFrame
 								}
 								else
 								{
-										al=5;
+									al=5;
 								}
 							}
-							System.out.println("al= "+al);
-							if(al<accesslevel)
+
+							int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+							if(accesslevel <= al)
 							{
-								approve=0;
-							}
-							else
-							{
-								approve=1;
-							}
-						}
-						else if((mousefirstindex > listofFi.get(nearestFiIndex)) && (mousefirstindex < listofLi.get(nearestFiIndex)))
-						{
-							if((listofAl.get(nearestFiIndex)) < accesslevel)
-							{
-								
-								int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
-								if(accesslevel > chkMiddleAl)
+								if(accesslevel <= chkMiddleAl)
 								{
-									approve=0;
+									approve=1;
 								}
 								else
 								{
+									approve=0;
+								}
+							}
+							else
+							{
+								approve=0;
+							}							
+						}
+						else if((mousefirstindex > listofFi.get(nearestFiIndex)) && (mousefirstindex < listofLi.get(nearestFiIndex)))
+						{
+							if((listofAl.get(nearestFiIndex)) > accesslevel)
+							{
+								int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
+								if(accesslevel <= chkMiddleAl)
+								{
 									approve=1;
+								}
+								else
+								{
+									approve=0;
 								}
 							}
 							else
@@ -950,16 +1142,16 @@ public class BrowseFile extends JFrame
 						}
 						else if((mouselastindex > listofFi.get(nearestFiIndex)) && (mouselastindex < listofLi.get(nearestFiIndex)))
 						{
-							if((listofAl.get(nearestFiIndex)) < accesslevel)
+							if((listofAl.get(nearestFiIndex)) > accesslevel)
 							{
 								int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
-								if(accesslevel > chkMiddleAl)
+								if(accesslevel <= chkMiddleAl)
 								{
-									approve=0;
+									approve=1;
 								}
 								else
 								{
-									approve=1;
+									approve=0;
 								}
 							}
 							else
@@ -970,49 +1162,49 @@ public class BrowseFile extends JFrame
 						else if((mousefirstindex < listofFi.get(nearestFiIndex)) && (mouselastindex < listofFi.get(nearestFiIndex)))
 						{
 							int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
-							if(accesslevel > chkMiddleAl)
+							if(accesslevel <= chkMiddleAl)
 							{
-								approve=0;
+								approve=1;
 							}
 							else
 							{
-								approve=1;
+								approve=0;
 							}
 						}
 						else if((mousefirstindex < listofFi.get(nearestFiIndex)) && (mouselastindex == listofFi.get(nearestFiIndex)))
 						{
 							int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
-							if(accesslevel > chkMiddleAl)
+							if(accesslevel <= chkMiddleAl)
 							{
-								approve=0;
+								approve=1;
 							}
 							else
 							{
-								approve=1;
+								approve=0;
 							}
 						}
 						else if((mousefirstindex > listofFi.get(nearestFiIndex)) && mouselastindex > listofLi.get(nearestFiIndex))
 						{
 							int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
-							if(accesslevel > chkMiddleAl)
+							if(accesslevel <= chkMiddleAl)
 							{
-								approve=0;
+								approve=1;
 							}
 							else
 							{
-								approve=1;
+								approve=0;
 							}
 						}
 						else if(mouselastindex>listofFi.get(nearestLiIndex) && mouselastindex<listofLi.get(nearestLiIndex))
 						{
 							int chkMiddleAl = middleIndexes(listofFi, listofAl, mousefirstindex, mouselastindex);
-							if(accesslevel > chkMiddleAl)
+							if(accesslevel <= chkMiddleAl)
 							{
-								approve=0;
+								approve=1;
 							}
 							else
 							{
-								approve=1;
+								approve=0;
 							}
 						} 
 						else
@@ -1093,19 +1285,47 @@ public class BrowseFile extends JFrame
 		int accesslevel=5;
 		for(int i=0; i<listofFi.size(); i++)
 		{
-			if(listofFi.get(i)>mousefirstindex && mouselastindex>listofFi.get(i))
+			if(listofFi.get(i)>=mousefirstindex && mouselastindex>listofFi.get(i))
 			{
 				listofIndexes.add(i);
 			}
 		}
 		for(int j=0; j<listofIndexes.size(); j++)
 		{
-			if(listofAl.get(listofIndexes.get(j)) < accesslevel)
+			if(listofAl.get(listofIndexes.get(j)) <= accesslevel)
 			{ 
 				accesslevel=listofAl.get(listofIndexes.get(j));
 			}
 		}
 		return accesslevel;
+	}
+	
+	public static boolean isMiddlehighlight(List<Integer> listofFi, List<Integer> listofLi,int mousefirstindex, int mouselastindex)
+	{
+		boolean middle = false;
+		for(int i=0; i<listofFi.size(); i++)
+		{
+			if(mousefirstindex >listofFi.get(i) && mouselastindex <listofLi.get(i))
+			{
+				middle=true;
+			}
+		}
+		return middle;
+	}  
+	
+	public static int outerhighlight(List<Integer> listofFi, List<Integer> listofLi,List<Integer> listofAl,int mousefirstindex, int mouselastindex)
+	{
+		int outerAl = 5;
+		List<Integer> listofOuter = new ArrayList<Integer>();
+		for(int i=0; i<listofFi.size(); i++)
+		{
+			if(mousefirstindex >listofFi.get(i) && mouselastindex <listofLi.get(i))
+			{
+				listofOuter.add(i);
+			}
+		}
+		outerAl=listofAl.get(listofOuter.get(0));
+		return outerAl;
 	}
 	
 	private static class lastchar implements Comparator<String>{
