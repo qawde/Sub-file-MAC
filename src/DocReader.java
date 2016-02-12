@@ -60,8 +60,7 @@ public class DocReader
 			run.getFontSize();
 			run.isBold();
 			run.isItalic();
-			run.isStrike();
-
+			run.isStrikeThrough();
 		}
 	}
 

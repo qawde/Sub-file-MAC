@@ -328,7 +328,7 @@ public class ChooseFunction extends JFrame
 			newRun.setFontFamily(run.getFontFamily());
 			newRun.setBold(run.isBold());
 			newRun.setItalic(run.isItalic());
-			newRun.setStrike(run.isStrike());
+			newRun.setStrikeThrough(run.isStrikeThrough());
 			newRun.setColor(run.getColor());
 		}
 	}

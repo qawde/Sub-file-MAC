@@ -26,9 +26,9 @@ public class OpenFile
 		fc.setCurrentDirectory(new File(System.getProperty("user.home")));
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.addChoosableFileFilter(new FileNameExtensionFilter("Text Documents", "txt"));
-		fc.addChoosableFileFilter(new FileNameExtensionFilter("MS Office Documents", "docx", "xlsx", "pptx"));
+		fc.addChoosableFileFilter(new FileNameExtensionFilter("Word Documents", "docx"/*, "xlsx", "pptx"*/));
 		fc.addChoosableFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
-		fc.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp"));
+		//fc.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp"));
 		fc.setAcceptAllFileFilterUsed(true);
 
 		int result = fc.showOpenDialog(null);
@@ -41,9 +41,9 @@ public class OpenFile
 
 			String pdf = "pdf";
 			String txt = "txt";
-			String doc = "doc";
+//			String doc = "doc";
 			String docx = "docx";
-			String xlsx = "xlsx";
+//			String xlsx = "xlsx";
 
 			if (pdf.equalsIgnoreCase(extension))
 			{
@@ -52,23 +52,26 @@ public class OpenFile
 				sb = new StringBuilder(pdfManager.ToText());
 			}
 
-			else if (xlsx.equalsIgnoreCase(extension))
+			/*else if (xlsx.equalsIgnoreCase(extension))
 			{
 				ExcelReader excelReader = new ExcelReader();
 				excelReader.setInputFile(selectedFile.getAbsolutePath());
 				sb = new StringBuilder(excelReader.read());
-			} else if (doc.equalsIgnoreCase(extension))
+			} 
+			else if (doc.equalsIgnoreCase(extension))
 			{
 				DocReader docReader = new DocReader();
 				docReader.setFileName(selectedFile.getAbsolutePath());
 				sb = new StringBuilder(docReader.DocToText());
 
-			} else if (docx.equalsIgnoreCase(extension))
+			}*/ 
+			else if (docx.equalsIgnoreCase(extension))
 			{
 				DocReader docReader = new DocReader();
 				docReader.setFilePath(selectedFile.getAbsolutePath());
 				sb = new StringBuilder(docReader.DocxToText());
-			} else if (txt.equalsIgnoreCase(extension))
+			} 
+			else if (txt.equalsIgnoreCase(extension))
 			{
 
 				java.io.File file = fc.getSelectedFile();
