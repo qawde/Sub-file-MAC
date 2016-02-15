@@ -24,16 +24,23 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
-
+import java.io.OutputStream;
 import java.nio.charset.Charset;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+
+/*import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;*/
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.BodyElementType;
+import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFStyle;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.xmlbeans.XmlException;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.PageSize;
@@ -182,96 +189,6 @@ public class ChooseFunction extends JFrame
 		lblPleaseChooseWhat.setBounds(100, 22, 234, 14);
 		contentPane.add(lblPleaseChooseWhat);
 	}
-	
-	public void viewFile(String extension, File newfile, StringBuilder build)
-	{
-		String pdf = "pdf";
-		String txt = "txt";
-		String docx = "docx";
-		try
-		{
-			if (pdf.equalsIgnoreCase(extension))
-			{
-				Document document = new Document(PageSize.A4);
-				PdfWriter.getInstance(document, new FileOutputStream("./temp file/" + of.filename));
-				document.open();
-				String breaking[] = build.toString().split("\r\n|\r|\r");
-				for (int count = 0; count < breaking.length; count++)
-				{
-					Paragraph para = new Paragraph();
-					para.add(breaking[count]);
-					document.add(para);
-				}
-				document.close();
-				if (Desktop.isDesktopSupported())
-				{
-					Desktop.getDesktop().open(newfile);
-				}
-			}
-
-			else if (docx.equalsIgnoreCase(extension))
-			{
-				try
-				{
-					FileInputStream is = new FileInputStream(of.filePath);
-					XWPFDocument doc = new XWPFDocument(is);
-					List<XWPFParagraph> paras = doc.getParagraphs();
-					XWPFDocument newdoc = new XWPFDocument();
-
-					String test[] = build.toString().split("\r\n|\r|\n");
-					int count = 0;
-					for (XWPFParagraph para : paras)
-					{
-						if (!para.getParagraphText().isEmpty())
-						{
-							XWPFParagraph newpara = newdoc.createParagraph();
-							List<XWPFRun> runs = para.getRuns();
-							for (int i = runs.size() - 1; i > 0; i--)
-							{
-								para.removeRun(i);
-							}
-							XWPFRun run = runs.get(0);
-							
-							run.setText(test[count], 0);
-							newpara.addRun(run);
-							copyAllRunsToAnotherParagraph(para, newpara, test[count]);
-							count++;
-						}
-					}
-					FileOutputStream fos = new FileOutputStream(new File("./temp file/" + of.filename));
-					newdoc.write(fos);
-					fos.flush();
-					fos.close();
-					if (Desktop.isDesktopSupported())
-					{
-						Desktop.getDesktop().open(newfile);
-					}
-				} catch (FileNotFoundException ex)
-				{
-					ex.printStackTrace();
-				} catch (IOException ex)
-				{
-					ex.printStackTrace();
-				}
-			}
-
-			else if (txt.equalsIgnoreCase(extension))
-			{
-				Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./temp file/" + of.filename), Charset.forName("utf-8")));
-				{
-					writer.write(build.toString());
-					writer.close();
-					if (Desktop.isDesktopSupported())
-					{
-						Desktop.getDesktop().open(newfile);
-					}
-				}
-			}
-		} catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-	}
 
 	public void censoredMethod(String extension, StringBuilder sb, File f, File newfile,  int accessID)
 	{
@@ -305,6 +222,127 @@ public class ChooseFunction extends JFrame
 			viewFile(extension, newfile, build);
 		}
 	}
+	
+	public void viewFile(String extension, File newfile, StringBuilder build)
+	{
+		String pdf = "pdf";
+		String txt = "txt";
+		String docx = "docx";
+		try
+		{
+			if (pdf.equalsIgnoreCase(extension))
+			{
+				Document document = new Document(PageSize.A4);
+				PdfWriter.getInstance(document, new FileOutputStream("./temp file/" + of.filename));
+				document.open();
+				String breaking[] = build.toString().split("\r\n|\r|\r");
+				for (int count = 0; count < breaking.length; count++)
+				{
+					Paragraph para = new Paragraph();
+					para.add(breaking[count]);
+					document.add(para);
+				}
+				document.close();
+				if (Desktop.isDesktopSupported())
+				{
+					Desktop.getDesktop().open(newfile);
+				}
+			}
+
+			else if (docx.equalsIgnoreCase(extension))
+			{
+				try
+				{
+					XWPFDocument doc = new XWPFDocument(new FileInputStream(of.filePath));
+					XWPFDocument newdoc = new XWPFDocument();
+					List<XWPFParagraph> paras = doc.getParagraphs();
+					FileOutputStream fos = new FileOutputStream(new File("./temp file/" + of.filename));
+					
+					String test[] = build.toString().split("\r\n|\r|\n");
+					int count = 0;
+					for (XWPFParagraph para : paras)
+					{
+						if (!para.getParagraphText().isEmpty())
+						{
+							XWPFParagraph newpara = newdoc.createParagraph();
+							List<XWPFRun> runs = para.getRuns();
+							for (int i = runs.size() - 1; i > 0; i--)
+							{
+								para.removeRun(i);
+							}
+							XWPFRun run = runs.get(0);
+							
+							run.setText(test[count], 0);
+							newpara.addRun(run);
+							copyAllRunsToAnotherParagraph(para, newpara, test[count]);
+							count++;
+						}
+					}
+					newdoc.write(fos);
+					fos.flush();
+					fos.close();
+					if (Desktop.isDesktopSupported())
+					{
+						Desktop.getDesktop().open(newfile);
+					}
+					
+				} catch (FileNotFoundException ex)
+				{
+					ex.printStackTrace();
+				} catch (IOException ex)
+				{
+					ex.printStackTrace();
+				}
+				
+				/*XWPFDocument doc = new XWPFDocument(new FileInputStream(of.filePath));
+		        XWPFDocument destDoc = new XWPFDocument();
+		        FileOutputStream out = new FileOutputStream(new File("./temp file/" + of.filename));
+		        
+		        for (IBodyElement bodyElement : doc.getBodyElements()) 
+		        {
+		            BodyElementType elementType = bodyElement.getElementType();
+
+		            if (elementType.name().equals("PARAGRAPH")) 
+		            {
+		                XWPFParagraph pr = (XWPFParagraph) bodyElement;
+		                destDoc.createParagraph();
+		                int pos = destDoc.getParagraphs().size() - 1;
+		                destDoc.setParagraph(pr, pos);
+		            } 
+		            else if( elementType.name().equals("TABLE") ) 
+		            {
+		                XWPFTable table = (XWPFTable) bodyElement;
+		                destDoc.createTable();
+		                int pos = destDoc.getTables().size() - 1;
+		                destDoc.setTable(pos, table);
+		            }
+		        }
+		        destDoc.write(out);
+		        
+		        if (Desktop.isDesktopSupported())
+				{
+					Desktop.getDesktop().open(newfile);
+				}*/
+		    }
+			
+
+			else if (txt.equalsIgnoreCase(extension))
+			{
+				Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./temp file/" + of.filename), Charset.forName("utf-8")));
+				{
+					writer.write(build.toString());
+					writer.close();
+					if (Desktop.isDesktopSupported())
+					{
+						Desktop.getDesktop().open(newfile);
+					}
+				}
+			}
+		} catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
 
 	private static void copyAllRunsToAnotherParagraph(XWPFParagraph oldPar, XWPFParagraph newPar, String text)
 	{
@@ -315,7 +353,7 @@ public class ChooseFunction extends JFrame
 			{
 				continue;
 			}
-
+			
 			int fontSize = run.getFontSize();
 
 			XWPFRun newRun = newPar.createRun();
@@ -324,7 +362,7 @@ public class ChooseFunction extends JFrame
 			newRun.setText(text);
 
 			// Apply the same style
-			// newRun.setFontSize( run.getFontSize() );
+			//newRun.setFontSize(run.getFontSize());
 			newRun.setFontFamily(run.getFontFamily());
 			newRun.setBold(run.isBold());
 			newRun.setItalic(run.isItalic());
