@@ -13,8 +13,10 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import java.io.BufferedReader;
+import java.io.*;
+/*import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.Writer;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,23 +26,24 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
-import java.io.OutputStream;
+import java.io.OutputStream;*/
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-
+import org.apache.poi.xwpf.usermodel.*;
 /*import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;*/
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+/*import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.BodyElementType;
 import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFStyle;
-import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTable;*/
 import org.apache.xmlbeans.XmlException;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTStyle;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.PageSize;
@@ -297,6 +300,7 @@ public class ChooseFunction extends JFrame
 				/*XWPFDocument doc = new XWPFDocument(new FileInputStream(of.filePath));
 		        XWPFDocument destDoc = new XWPFDocument();
 		        FileOutputStream out = new FileOutputStream(new File("./temp file/" + of.filename));
+		        List<XWPFParagraph> paras = doc.getParagraphs();
 		        
 		        for (IBodyElement bodyElement : doc.getBodyElements()) 
 		        {
@@ -305,8 +309,36 @@ public class ChooseFunction extends JFrame
 		            if (elementType.name().equals("PARAGRAPH")) 
 		            {
 		                XWPFParagraph pr = (XWPFParagraph) bodyElement;
+		                XWPFStyle style = doc.getStyles().getStyle(pr.getStyleID());
+		                List<XWPFStyle> usedStyleList = doc.getStyles().getUsedStyleList(style);
+		                
 		                destDoc.createParagraph();
 		                int pos = destDoc.getParagraphs().size() - 1;
+		                //here
+		                String test[] = build.toString().split("\r\n|\r|\n");
+						int count = 0;
+						for (XWPFParagraph para : paras)
+						{
+							if (!para.getParagraphText().isEmpty())
+							{
+								//XWPFParagraph newpara = destDoc.createParagraph();
+								List<XWPFRun> runs = para.getRuns();
+								for (int i = runs.size() - 1; i > 0; i--)
+								{
+									para.removeRun(i);
+								}
+								XWPFRun run = runs.get(0);
+								
+								run.setText(test[count], 0);
+								pr.addRun(run);
+								count++;
+							}
+						}
+						//here
+						
+				        for (XWPFStyle xwpfStyle : usedStyleList) {
+				            destDoc.getStyles().addStyle(xwpfStyle);
+				        }
 		                destDoc.setParagraph(pr, pos);
 		            } 
 		            else if( elementType.name().equals("TABLE") ) 
@@ -317,15 +349,14 @@ public class ChooseFunction extends JFrame
 		                destDoc.setTable(pos, table);
 		            }
 		        }
+		        
 		        destDoc.write(out);
 		        
 		        if (Desktop.isDesktopSupported())
 				{
 					Desktop.getDesktop().open(newfile);
 				}*/
-		    }
-			
-
+			}
 			else if (txt.equalsIgnoreCase(extension))
 			{
 				Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./temp file/" + of.filename), Charset.forName("utf-8")));
@@ -352,22 +383,32 @@ public class ChooseFunction extends JFrame
 			if (textInRun == null || textInRun.isEmpty())
 			{
 				continue;
-			}
-			
-			int fontSize = run.getFontSize();
-
+			}		
 			XWPFRun newRun = newPar.createRun();
-
-			// Copy text
-			newRun.setText(text);
-
+			newRun.setText(text);// Copy text
+			
 			// Apply the same style
 			//newRun.setFontSize(run.getFontSize());
-			newRun.setFontFamily(run.getFontFamily());
+			/*newRun.setFontFamily(run.getFontFamily());
 			newRun.setBold(run.isBold());
 			newRun.setItalic(run.isItalic());
 			newRun.setStrikeThrough(run.isStrikeThrough());
-			newRun.setColor(run.getColor());
+			newRun.setColor(run.getColor());*/
 		}
 	}
+	
+	/*private static void copyStyle(XWPFDocument srcDoc, XWPFDocument destDoc, XWPFStyle style)
+    {
+        if (destDoc == null || style == null)
+            return;
+
+        if (destDoc.getStyles() == null) {
+            destDoc.createStyles();
+        }
+
+        List<XWPFStyle> usedStyleList = srcDoc.getStyles().getUsedStyleList(style);
+        for (XWPFStyle xwpfStyle : usedStyleList) {
+            destDoc.getStyles().addStyle(xwpfStyle);
+        }
+    }*/
 }
