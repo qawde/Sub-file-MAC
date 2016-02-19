@@ -296,7 +296,7 @@ public class ChooseFunction extends JFrame
 				{
 					ex.printStackTrace();
 				}
-				
+
 				/*XWPFDocument doc = new XWPFDocument(new FileInputStream(of.filePath));
 		        XWPFDocument destDoc = new XWPFDocument();
 		        FileOutputStream out = new FileOutputStream(new File("./temp file/" + of.filename));
@@ -314,31 +314,6 @@ public class ChooseFunction extends JFrame
 		                
 		                destDoc.createParagraph();
 		                int pos = destDoc.getParagraphs().size() - 1;
-		                //here
-		                String test[] = build.toString().split("\r\n|\r|\n");
-						int count = 0;
-						for (XWPFParagraph para : paras)
-						{
-							if (!para.getParagraphText().isEmpty())
-							{
-								//XWPFParagraph newpara = destDoc.createParagraph();
-								List<XWPFRun> runs = para.getRuns();
-								for (int i = runs.size() - 1; i > 0; i--)
-								{
-									para.removeRun(i);
-								}
-								XWPFRun run = runs.get(0);
-								
-								run.setText(test[count], 0);
-								pr.addRun(run);
-								count++;
-							}
-						}
-						//here
-						
-				        for (XWPFStyle xwpfStyle : usedStyleList) {
-				            destDoc.getStyles().addStyle(xwpfStyle);
-				        }
 		                destDoc.setParagraph(pr, pos);
 		            } 
 		            else if( elementType.name().equals("TABLE") ) 
