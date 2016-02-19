@@ -808,6 +808,7 @@ public class BrowseFile extends JFrame
 									approve=0;
 								}
 							}
+							
 							else if(listofFi.get(nearestLiIndex) >= listofFi.get(nearestFiIndex))//here
 							{	
 								if((mousefirstindex > listofFi.get(nearestFiIndex)) && (mousefirstindex < listofLi.get(nearestFiIndex)))
