@@ -395,20 +395,5 @@ public class ChooseFunction extends JFrame
 			newRun.setStrikeThrough(run.isStrikeThrough());
 			newRun.setColor(run.getColor());*/
 		}
-	}
-	
-	/*private static void copyStyle(XWPFDocument srcDoc, XWPFDocument destDoc, XWPFStyle style)
-    {
-        if (destDoc == null || style == null)
-            return;
-
-        if (destDoc.getStyles() == null) {
-            destDoc.createStyles();
-        }
-
-        List<XWPFStyle> usedStyleList = srcDoc.getStyles().getUsedStyleList(style);
-        for (XWPFStyle xwpfStyle : usedStyleList) {
-            destDoc.getStyles().addStyle(xwpfStyle);
-        }
-    }*/
-}
+	}	
+}	
